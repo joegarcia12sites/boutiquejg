@@ -1136,7 +1136,6 @@
 
                         <div id="modal-price-container" class="pb-4 border-b border-[#C6A37C]/20">
                             <span id="modal-price" class="font-serif-jg text-3xl text-[#E5C8A8] block">R$ 2.890,00</span>
-                            <span id="modal-installments" class="text-xs text-[#A39B93]">ou 6x de R$ 481,67 sem juros</span>
                         </div>
 
                         <p id="modal-description" class="text-xs sm:text-sm text-[#A39B93] leading-relaxed font-light"></p>
@@ -1180,13 +1179,10 @@
                         </div>
                     </div>
 
-                    <div class="pt-6 border-t border-[#C6A37C]/20 space-y-3">
+                    <div class="pt-6 border-t border-[#C6A37C]/20">
                         <button type="button" onclick="addCurrentModalProductToCart()" class="btn-gold w-full py-4">
-                            <span id="modal-buy-button-text">Adicionar à Sacola</span>
+                            <span id="modal-buy-button-text">Consultar Peça via WhatsApp Concierge</span>
                         </button>
-                        <p class="text-[10px] tracking-[0.22em] uppercase text-center text-[#A39B93]">
-                            Ajuste Cortesia no Atelier • Reserva Exclusiva via Concierge
-                        </p>
                     </div>
                 </div>
             </div>
@@ -1464,9 +1460,10 @@
                 searchAndFilters: true,
                 showPrices: true,
                 showSizesSection: true,
+                showProductAngles: true,
                 showMeasureGuide: true,
                 enableCoupons: true,
-                enableCartAndCheckout: true,
+                enableCartAndCheckout: false,
                 atelierSection: true,
                 floatingWhatsapp: true,
                 socialLinks: true
@@ -1771,6 +1768,7 @@
         // Estado do Editor Admin
         let editingProductId = null;
         let tempProductImages = ["", "", ""];
+        let tempVisibleAngles = [true, true, true];
         let inlineEditMode = false;
         let currentInlineTarget = null;
         let appliedCoupon = null;
@@ -1803,7 +1801,14 @@
                     ...parsed,
                     adminPassword: parsed.adminPassword || defaultClone.adminPassword,
                     cloud: resolvedCloud,
-                    visibility: { ...defaultClone.visibility, ...(parsed.visibility || {}) },
+                    visibility: {
+                        ...defaultClone.visibility,
+                        ...(parsed.visibility || {}),
+                        enableCartAndCheckout: parsed.visibility && typeof parsed.visibility.onlyWhatsappUpdated !== "undefined"
+                            ? parsed.visibility.enableCartAndCheckout
+                            : false,
+                        onlyWhatsappUpdated: true
+                    },
                     orders: Array.isArray(parsed.orders) ? parsed.orders : defaultClone.orders,
                     coupons: Array.isArray(parsed.coupons) ? parsed.coupons : defaultClone.coupons,
                     texts: { ...defaultClone.texts, ...(parsed.texts || {}) },
@@ -1812,6 +1817,10 @@
                 if (Array.isArray(merged.products)) {
                     merged.products.forEach(p => {
                         if (typeof p.showSizes === "undefined") p.showSizes = true;
+                        if (typeof p.showAngles === "undefined") p.showAngles = true;
+                        if (!Array.isArray(p.visibleAngles) || p.visibleAngles.length < 3) {
+                            p.visibleAngles = [true, true, true];
+                        }
                         if (Array.isArray(p.sizes) && p.sizes.length > 0) {
                             p.sizes = p.sizes.map(s => s === "ÚNICO" ? "Unico" : s);
                         } else {
@@ -2097,15 +2106,13 @@
                 let priceBlockHtml = "";
                 if (showPrices) {
                     const innerPrice = product.promoPrice
-                        ? `<div class="flex flex-wrap items-baseline gap-1">
+                        ? `<div class="flex flex-wrap items-baseline gap-1.5">
                                <span class="text-[10px] sm:text-xs line-through text-[#6E665F]">${formatCurrency(product.price)}</span>
                                <span class="font-serif-jg text-base sm:text-xl text-[#E5C8A8]">${formatCurrency(product.promoPrice)}</span>
-                           </div>
-                           <span class="text-[9px] sm:text-[10px] text-[#6E665F] block sm:inline">6x de ${formatCurrency(effectivePrice / 6)}</span>`
-                        : `<span class="font-serif-jg text-base sm:text-xl text-[#E5C8A8]">${formatCurrency(product.price)}</span>
-                           <span class="text-[9px] sm:text-[10px] text-[#6E665F] block sm:inline">6x de ${formatCurrency(product.price / 6)}</span>`;
+                           </div>`
+                        : `<span class="font-serif-jg text-base sm:text-xl text-[#E5C8A8]">${formatCurrency(product.price)}</span>`;
 
-                    priceBlockHtml = `<div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-2.5 sm:mb-3 gap-0.5">${innerPrice}</div>`;
+                    priceBlockHtml = `<div class="flex items-baseline justify-between mb-2.5 sm:mb-3">${innerPrice}</div>`;
                 }
 
                 return `
@@ -2243,7 +2250,9 @@
             const availableSizes = getFilteredProductSizes(product);
             const shouldShowSizes = siteConfig.visibility.showSizesSection !== false && product.showSizes !== false;
             selectedSize = shouldShowSizes ? availableSizes[0] : "Unico";
-            activeGalleryAngle = 0;
+
+            const enabledAngles = getEnabledAnglesForProduct(product);
+            activeGalleryAngle = enabledAngles.length > 0 ? enabledAngles[0] : 0;
 
             const effectivePrice = product.promoPrice || product.price;
             document.getElementById("modal-category").textContent = product.category;
@@ -2254,7 +2263,6 @@
             if (siteConfig.visibility.showPrices) {
                 if (priceContainer) priceContainer.classList.remove("hidden");
                 document.getElementById("modal-price").textContent = formatCurrency(effectivePrice);
-                document.getElementById("modal-installments").textContent = `ou 6x de ${formatCurrency(effectivePrice / 6)} sem juros`;
             } else {
                 // Oculta o bloco de preço sem deixar espaço em branco quando os preços estão desativados
                 if (priceContainer) priceContainer.classList.add("hidden");
@@ -2264,12 +2272,10 @@
             document.getElementById("modal-composition").textContent = `Composição: ${product.composition || "Tecido Nobre Exclusivo JG"}`;
 
             const buyBtnText = document.getElementById("modal-buy-button-text");
-            if (!siteConfig.visibility.enableCartAndCheckout || !siteConfig.visibility.showPrices) {
-                buyBtnText.textContent = "Consultar Peça via WhatsApp Concierge";
-            } else if (product.badge === "Esgotado") {
-                buyBtnText.textContent = "Peça Esgotada — Solicitar Lista de Espera";
+            if (product.badge === "Esgotado") {
+                buyBtnText.textContent = "Peça Esgotada — Consultar Lista de Espera no WhatsApp";
             } else {
-                buyBtnText.textContent = "Adicionar à Sacola";
+                buyBtnText.textContent = "Consultar Peça via WhatsApp Concierge";
             }
 
             renderModalGallery();
@@ -2295,6 +2301,21 @@
             document.body.style.overflow = "";
         }
 
+        function getEnabledAnglesForProduct(product) {
+            if (!product) return [0];
+            if (siteConfig.visibility.showProductAngles === false || product.showAngles === false) {
+                return [];
+            }
+            const vis = Array.isArray(product.visibleAngles) && product.visibleAngles.length === 3
+                ? product.visibleAngles
+                : [true, true, true];
+            const indices = [];
+            vis.forEach((isShown, idx) => {
+                if (isShown) indices.push(idx);
+            });
+            return indices;
+        }
+
         function renderModalGallery() {
             const mainBox = document.getElementById("modal-main-image");
             const thumbsContainer = document.getElementById("modal-thumbnails");
@@ -2314,13 +2335,22 @@
                 `;
             }
 
-            thumbsContainer.innerHTML = angleTitles.map((title, idx) => `
+            const enabledAngles = getEnabledAnglesForProduct(activeProduct);
+            if (enabledAngles.length === 0) {
+                thumbsContainer.classList.add("hidden");
+                thumbsContainer.innerHTML = "";
+                return;
+            }
+
+            thumbsContainer.classList.remove("hidden");
+            thumbsContainer.className = `grid grid-cols-${enabledAngles.length} gap-3`;
+            thumbsContainer.innerHTML = enabledAngles.map((angleIdx, displayIdx) => `
                 <button 
-                    onclick="setGalleryAngle(${idx})" 
-                    class="p-2.5 border ${activeGalleryAngle === idx ? 'border-[#E5C8A8] bg-[#C6A37C]/15' : 'border-[#C6A37C]/25 bg-[#0B0B0B]'} text-center transition hover:border-[#C6A37C]"
+                    onclick="setGalleryAngle(${angleIdx})" 
+                    class="p-2.5 border ${activeGalleryAngle === angleIdx ? 'border-[#E5C8A8] bg-[#C6A37C]/15' : 'border-[#C6A37C]/25 bg-[#0B0B0B]'} text-center transition hover:border-[#C6A37C]"
                 >
-                    <span class="block text-[9px] tracking-[0.22em] uppercase text-[#E5C8A8]">0${idx + 1}</span>
-                    <span class="block text-[10px] text-[#A39B93] mt-0.5">${title}</span>
+                    <span class="block text-[9px] tracking-[0.22em] uppercase text-[#E5C8A8]">0${displayIdx + 1}</span>
+                    <span class="block text-[10px] text-[#A39B93] mt-0.5">${angleTitles[angleIdx]}</span>
                 </button>
             `).join('');
         }
@@ -2388,9 +2418,12 @@
         function addCurrentModalProductToCart() {
             if (!activeProduct) return;
 
-            // Se a venda direta estiver desativada ou sob consulta, redireciona para WhatsApp Concierge
+            // Redireciona diretamente para o WhatsApp cadastrado ao clicar em "Consultar Peça via WhatsApp Concierge"
             if (!siteConfig.visibility.enableCartAndCheckout || !siteConfig.visibility.showPrices || activeProduct.badge === "Esgotado") {
-                const msg = encodeURIComponent(`Olá! Gostaria de atendimento exclusivo sobre a peça "${activeProduct.name}" (${activeProduct.sku}) - Cor: ${selectedColor}, Tamanho: ${selectedSize}.`);
+                const effectivePrice = activeProduct.promoPrice || activeProduct.price;
+                const priceInfo = siteConfig.visibility.showPrices ? ` • Valor: ${formatCurrency(effectivePrice)}` : "";
+                const sizeInfo = (siteConfig.visibility.showSizesSection !== false && activeProduct.showSizes !== false) ? `, Tamanho: ${selectedSize}` : "";
+                const msg = encodeURIComponent(`Olá! Gostaria de consultar a peça "${activeProduct.name}" (REF: ${activeProduct.sku}) — Cor: ${selectedColor}${sizeInfo}${priceInfo}.`);
                 const phone = (siteConfig.texts.whatsappNumber || "5511999990000").replace(/\D/g, "");
                 window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
                 return;
@@ -3273,15 +3306,16 @@
         // ABA 2: VISIBILIDADE
         const VISIBILITY_LABELS = [
             { key: "topbar", title: "Barra de Aviso no Topo (Topbar)", desc: "Exibe o comunicado de frete cortesia e concierge no topo da página." },
-            { key: "hero", title: "Seção Hero (Destaque Principal)", desc: "Exibe a seção de abertura com logo completo, chamada e imagem editorial." },
+            { key: "hero", title: "Seção Hero (Destaque Principal)", desc: "Exibe a seção de abertura com logo completo, chamada e botão principal." },
             { key: "dividers", title: "Divisor de Manequim Dourado entre Seções", desc: "Exibe o ornamento horizontal •─── [manequim] ───• separando os blocos." },
             { key: "collections", title: "Seção de Coleções em Destaque", desc: "Exibe os 3 banners verticais de coleções acima do catálogo." },
             { key: "searchAndFilters", title: "Barra de Busca e Filtros de Categoria", desc: "Permite que clientes filtrem peças por categoria ou pesquisem por nome." },
-            { key: "showPrices", title: "Exibição de Preços nos Produtos", desc: "Desative para operar em Modo Catálogo ('Sob Consulta') sem valores visíveis." },
-            { key: "showSizesSection", title: "Exibir Seletor de Tamanhos nas Roupas (Geral)", desc: "Permite ativar ou ocultar o seletor de tamanhos globalmente (você também pode configurar peça por peça na Aba 5)." },
+            { key: "showPrices", title: "Exibição de Preços Brutos nos Produtos", desc: "Desative para operar sem valores visíveis nos cards e nos detalhes da peça." },
+            { key: "showSizesSection", title: "Exibir Seletor de Tamanhos nas Roupas (Geral)", desc: "Permite ativar ou ocultar o seletor de tamanhos globalmente (você também pode configurar peça por peça na Aba 6)." },
+            { key: "showProductAngles", title: "Exibir Botões de Ângulos da Galeria (01 Frente, 02 Costas, 03 Detalhe)", desc: "Desative se quiser ocultar os seletores de ângulos em todas as peças (também configurável peça por peça na Aba 4)." },
             { key: "showMeasureGuide", title: "Exibir Botão 'Guia de Medidas'", desc: "Mostra ou oculta a tabela de medidas corporais dentro da página de produto." },
-            { key: "enableCoupons", title: "Exibir Campo de Cupom de Desconto", desc: "Permite que clientes apliquem códigos de desconto na sacola e na finalização." },
-            { key: "enableCartAndCheckout", title: "Sacola de Compras & Checkout Direto", desc: "Se desativado, o botão de compra envia o pedido diretamente para o WhatsApp Concierge." },
+            { key: "enableCoupons", title: "Exibir Campo de Cupom de Desconto", desc: "Permite que clientes apliquem códigos de desconto quando a sacola estiver ativa." },
+            { key: "enableCartAndCheckout", title: "Usar Sacola de Compras (Desativado = Direto para WhatsApp)", desc: "Quando desativado (padrão), o botão 'Consultar Peça via WhatsApp Concierge' redireciona diretamente para o WhatsApp cadastrado." },
             { key: "atelierSection", title: "Seção 'O Atelier / Manifesto da Marca'", desc: "Exibe a história da Boutique JG e diferenciais de alta-costura." },
             { key: "floatingWhatsapp", title: "Botão Flutuante de WhatsApp Concierge", desc: "Exibe o atalho rápido de atendimento no canto inferior esquerdo." },
             { key: "socialLinks", title: "Link do Instagram no Rodapé", desc: "Exibe o atalho oficial para o perfil do Instagram da Boutique no rodapé." }
@@ -3516,6 +3550,10 @@
                         </div>
 
                         <div class="flex flex-wrap items-center gap-2.5">
+                            <label class="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-[#A39B93] mr-2 cursor-pointer" title="Exibir ou ocultar os botões de ângulos (Frente, Costas, Detalhe) nesta peça">
+                                <input type="checkbox" ${p.showAngles !== false ? 'checked' : ''} onchange="toggleProductAnglesDisplay(${p.id}, this.checked)" class="accent-[#C6A37C]">
+                                <span>Ângulos</span>
+                            </label>
                             <label class="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-[#A39B93] mr-2 cursor-pointer" title="Exibir ou ocultar opções de tamanho nesta peça">
                                 <input type="checkbox" ${p.showSizes !== false ? 'checked' : ''} onchange="toggleProductSizesDisplay(${p.id}, this.checked)" class="accent-[#C6A37C]">
                                 <span>Tamanhos</span>
@@ -3537,6 +3575,15 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function toggleProductAnglesDisplay(productId, showAngles) {
+            const prod = siteConfig.products.find(p => p.id === productId);
+            if (!prod) return;
+            prod.showAngles = showAngles;
+            saveSiteConfig();
+            renderAdminProductsList();
+            showToast(`Seletores de ângulos ${showAngles ? 'exibidos' : 'ocultados'} para "${prod.name}".`);
         }
 
         function toggleProductSizesDisplay(productId, showSizes) {
@@ -3597,6 +3644,8 @@
                     composition: "100% Seda Pura",
                     images: ["", "", ""],
                     showSizes: true,
+                    showAngles: true,
+                    visibleAngles: [true, true, true],
                     sizes: ["PP", "P", "M", "G", "Unico"],
                     colors: [{ name: "Preto Ônix", hex: "#0B0B0B" }, { name: "Dourado Champagne", hex: "#C6A37C" }]
                 };
@@ -3607,9 +3656,13 @@
             tempProductImages = [...(prod.images || ["", "", ""])];
             while (tempProductImages.length < 3) tempProductImages.push("");
 
+            tempVisibleAngles = Array.isArray(prod.visibleAngles) && prod.visibleAngles.length === 3
+                ? [...prod.visibleAngles]
+                : [true, true, true];
+
+            const angleNames = ["01 Frente", "02 Costas", "03 Detalhe Tecido"];
             const catOptions = siteConfig.categories.map(c => `<option value="${c}" ${prod.category === c ? 'selected' : ''}>${c}</option>`).join('');
             const colorsStr = (prod.colors || []).map(c => `${c.name}:${c.hex}`).join(", ");
-            const sizesStr = (prod.sizes || []).join(", ");
 
             box.innerHTML = `
                 <div class="flex items-center justify-between border-b border-[#C6A37C]/25 pb-3">
@@ -3631,7 +3684,7 @@
                         <select id="ed-prod-category" class="input-luxury">${catOptions}</select>
                     </div>
                     <div>
-                        <label class="block text-[10px] uppercase tracking-widest text-[#A39B93] mb-1">Preço Original (R$)</label>
+                        <label class="block text-[10px] uppercase tracking-widest text-[#A39B93] mb-1">Preço Bruto (R$)</label>
                         <input type="number" step="0.01" id="ed-prod-price" value="${prod.price}" class="input-luxury">
                     </div>
                     <div>
@@ -3649,13 +3702,38 @@
                     </div>
                 </div>
 
-                <!-- Galeria de 3 Imagens (URL ou Upload do Computador/Celular) -->
-                <div class="p-4 bg-[#080808] border border-[#C6A37C]/20 space-y-3">
-                    <h5 class="text-[10px] tracking-[0.25em] uppercase text-[#E5C8A8]">Fotos da Peça (3 Ângulos: Frente, Costas, Detalhe) — Cole URL ou faça Upload</h5>
+                <!-- Galeria de 3 Imagens e Controle de Ângulos Exibíveis -->
+                <div class="p-4 bg-[#080808] border border-[#C6A37C]/20 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#C6A37C]/15 pb-3">
+                        <div>
+                            <h5 class="text-[10px] tracking-[0.25em] uppercase text-[#E5C8A8]">Fotos da Peça & Exibição de Ângulos (01 Frente, 02 Costas, 03 Detalhe)</h5>
+                            <p class="text-[11px] text-[#A39B93] mt-0.5">Marque quais ângulos devem aparecer na peça ou clique em "Apenas Frontal (Sem Abas)" quando só houver 1 foto.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="setEditorAnglesPreset('front-only')" class="px-2.5 py-1 border border-[#C6A37C]/45 text-[9px] uppercase tracking-wider text-[#E5C8A8] hover:bg-[#C6A37C]/15">
+                                Apenas Frontal (Ocultar Abas)
+                            </button>
+                            <button type="button" onclick="setEditorAnglesPreset('all')" class="px-2.5 py-1 border border-[#C6A37C]/30 text-[9px] uppercase tracking-wider text-[#A39B93] hover:text-[#E5C8A8]">
+                                Exibir os 3 Ângulos
+                            </button>
+                        </div>
+                    </div>
+
+                    <label class="flex items-center gap-2 text-xs text-[#E5C8A8] cursor-pointer">
+                        <input type="checkbox" id="ed-prod-show-angles" ${prod.showAngles !== false ? 'checked' : ''} class="accent-[#C6A37C]">
+                        <span>Exibir barra de seleção de ângulos nesta peça</span>
+                    </label>
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         ${[0, 1, 2].map(idx => `
-                            <div class="space-y-2">
-                                <label class="block text-[10px] text-[#A39B93]">Ângulo 0${idx + 1}</label>
+                            <div class="p-3 bg-[#0D0D0D] border border-[#C6A37C]/20 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] uppercase tracking-wider text-[#E5C8A8]">${angleNames[idx]}</span>
+                                    <label class="flex items-center gap-1.5 text-[10px] text-[#A39B93] cursor-pointer">
+                                        <input type="checkbox" id="ed-prod-angle-vis-${idx}" ${tempVisibleAngles[idx] ? 'checked' : ''} onchange="tempVisibleAngles[${idx}] = this.checked" class="accent-[#C6A37C]">
+                                        <span>Exibir ângulo</span>
+                                    </label>
+                                </div>
                                 <div class="flex gap-2">
                                     <input type="text" id="ed-prod-img-${idx}" value="${escapeAttr(tempProductImages[idx])}" oninput="tempProductImages[${idx}] = this.value" placeholder="URL ou Upload ->" class="input-luxury text-xs">
                                     <label class="btn-gold px-3 py-2 cursor-pointer text-[9px] shrink-0">
@@ -3736,6 +3814,21 @@
             });
         }
 
+        function setEditorAnglesPreset(mode) {
+            const showAnglesChk = document.getElementById("ed-prod-show-angles");
+            if (mode === "front-only") {
+                if (showAnglesChk) showAnglesChk.checked = false;
+                tempVisibleAngles = [true, false, false];
+            } else {
+                if (showAnglesChk) showAnglesChk.checked = true;
+                tempVisibleAngles = [true, true, true];
+            }
+            [0, 1, 2].forEach(idx => {
+                const chk = document.getElementById(`ed-prod-angle-vis-${idx}`);
+                if (chk) chk.checked = tempVisibleAngles[idx];
+            });
+        }
+
         function uploadProductGalleryImage(event, angleIndex) {
             const file = event.target.files[0];
             if (!file) return;
@@ -3766,6 +3859,7 @@
             const composition = document.getElementById("ed-prod-comp").value.trim();
             const silhouetteType = document.getElementById("ed-prod-silhouette").value;
             const showSizes = document.getElementById("ed-prod-show-sizes").checked;
+            const showAngles = document.getElementById("ed-prod-show-angles").checked;
 
             const sizes = Array.from(document.querySelectorAll('input[name="ed-prod-size-chk"]:checked')).map(el => el.value);
 
@@ -3787,6 +3881,8 @@
                 badge,
                 visible: true,
                 showSizes,
+                showAngles,
+                visibleAngles: [...tempVisibleAngles],
                 images: [...tempProductImages],
                 placeholderLabel: name,
                 silhouetteType,
