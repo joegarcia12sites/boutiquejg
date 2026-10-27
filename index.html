@@ -27,242 +27,207 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- ==========================================================================
-         CONFIGURAÇÃO DE ESTILOS E PALETA DE CORES EXTRAÍDA DO LOGO (IMG_6381.PNG)
+         ESTILOS PERSONALIZADOS (PALETA NOIR & OR - BOUTIQUE JG)
          ========================================================================== -->
     <style>
         :root {
-            /* Fundo Preto Profundo extraído da imagem */
             --bg-primary: #060606;
             --bg-secondary: #0D0D0D;
-            --bg-elevated: #141414;
-            
-            /* Dourado Metálico / Champagne Bronze extraído da tipografia e manequim */
-            --gold-light: #E5C8A8;
             --gold-primary: #C6A37C;
+            --gold-light: #E5C8A8;
             --gold-dark: #9A7753;
-            --gold-border: rgba(198, 163, 124, 0.24);
-            --gold-border-hover: rgba(229, 200, 168, 0.65);
-            --gold-glow: rgba(198, 163, 124, 0.08);
-            
-            /* Textos de alto contraste para leitura confortável sobre fundo escuro */
-            --text-primary: #F5EFEA;
-            --text-secondary: #A39B93;
-            --text-muted: #6E665F;
-            
-            /* Tipografia */
-            --font-serif: 'Cormorant Garamond', Georgia, serif;
-            --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            --text-ivory: #F5EFEA;
+            --text-muted: #A39B93;
         }
 
         body {
             background-color: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-weight: 300;
+            color: var(--text-ivory);
+            font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* Utilitários de Tipografia da Marca */
+        /* Barra de Rolagem Minimalista e Discreta (Noir & Or) */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(198, 163, 124, 0.18) #060606;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #060606;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(198, 163, 124, 0.18);
+            border-radius: 9999px;
+            border: 1px solid #060606;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(198, 163, 124, 0.42);
+        }
+
         .font-serif-jg {
-            font-family: var(--font-serif);
-        }
-        
-        .font-sans-jg {
-            font-family: var(--font-sans);
+            font-family: 'Cormorant Garamond', Georgia, serif;
         }
 
-        /* Efeito Metálico no Monograma JG e títulos especiais */
-        .gold-gradient-text {
-            background: linear-gradient(135deg, #F0D9C0 0%, #C6A37C 48%, #9A7753 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Monograma JG idêntico ao Logo: Compatível com iOS/Safari e Android (evita sumir o 'J' com background-clip) */
+        /* Monograma JG com proteção para não cortar o 'J' no Safari/Mobile */
         .monogram-jg {
-            font-family: var(--font-serif);
+            font-family: 'Cormorant Garamond', Georgia, serif;
             font-weight: 400;
-            line-height: 1.05;
             letter-spacing: -0.05em;
+            line-height: 1.15;
             display: inline-flex;
             align-items: baseline;
-            justify-content: center;
-            padding: 0.06em 0.14em 0.16em;
-            overflow: visible;
-        }
-        .monogram-jg > span {
-            background: linear-gradient(135deg, #F0D9C0 0%, var(--gold-primary) 48%, #9A7753 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: var(--gold-light);
-            display: inline-block;
-            padding: 0 0.03em;
-        }
-        .monogram-jg .letter-j {
-            position: relative;
-            top: 0.07em;
-            margin-right: -0.04em;
+            padding: 0.08em 0.06em 0.16em;
         }
 
-        /* Divisor Horizontal com Círculos nas Pontas (Motivo do Logo) */
-        .jg-divider {
+        .monogram-jg > span {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .monogram-jg .letter-j {
+            transform: translateY(0.07em);
+            margin-right: -0.03em;
+            padding-bottom: 0.08em;
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Divisor de Manequim com Linhas e Círculos nas Pontas */
+        .mannequin-divider {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1.25rem;
+            gap: 1.15rem;
             width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .jg-divider-line {
+
+        .mannequin-divider .line-left,
+        .mannequin-divider .line-right {
             flex: 1;
             height: 1px;
             background-color: var(--gold-primary);
             opacity: 0.55;
             position: relative;
         }
-        .jg-divider-line.left::before,
-        .jg-divider-line.right::after {
+
+        .mannequin-divider .line-left::before {
             content: '';
             position: absolute;
+            left: 0;
             top: 50%;
+            transform: translateY(-50%);
             width: 4px;
             height: 4px;
-            border-radius: 50%;
+            border-radius: 9999px;
             background-color: var(--gold-light);
-            transform: translateY(-50%);
-        }
-        .jg-divider-line.left::before {
-            left: 0;
-        }
-        .jg-divider-line.right::after {
-            right: 0;
         }
 
-        /* Botões Elegantes (Apenas contorno dourado, nunca blocos grandes preenchidos) */
-        .btn-gold {
-            background-color: transparent;
-            color: var(--gold-light);
-            border: 1px solid var(--gold-primary);
-            font-family: var(--font-sans);
-            font-size: 0.72rem;
-            font-weight: 400;
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
-            padding: 1rem 2.25rem;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        .mannequin-divider .line-right::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 9999px;
+            background-color: var(--gold-light);
+        }
+
+        /* Cards e Botões de Luxo */
+        .luxury-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid rgba(198, 163, 124, 0.2);
+            transition: all 0.35s ease;
+        }
+
+        .luxury-card:hover {
+            border-color: rgba(229, 200, 168, 0.65);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.75);
+        }
+
+        .placeholder-box {
+            background: radial-gradient(circle at center, #151310 0%, #090909 100%);
             position: relative;
             overflow: hidden;
+        }
+
+        .placeholder-badge {
+            position: absolute;
+            bottom: 0.5rem;
+            left: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem 0.4rem;
+            background: rgba(6, 6, 6, 0.85);
+            border: 1px dashed rgba(198, 163, 124, 0.4);
+            color: var(--text-muted);
+            font-size: 8px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .btn-gold {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            cursor: pointer;
-        }
-        .btn-gold:hover {
-            border-color: var(--gold-light);
-            color: #FFFFFF;
-            background-color: rgba(198, 163, 124, 0.12);
-            box-shadow: 0 0 25px rgba(198, 163, 124, 0.15);
-        }
-        .btn-gold:active {
-            transform: scale(0.99);
-        }
-
-        /* Cards e Molduras Editoriais */
-        .luxury-card {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--gold-border);
-            transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
-        }
-        .luxury-card:hover {
-            border-color: var(--gold-border-hover);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 20px var(--gold-glow);
-        }
-
-        /* Placeholders de Imagens Sinalizados para Substituição */
-        .placeholder-box {
-            position: relative;
-            overflow: hidden;
-            background: radial-gradient(circle at 50% 35%, #1A1613 0%, #090909 75%);
-        }
-        .placeholder-badge {
-            position: absolute;
-            bottom: 0.75rem;
-            left: 0.75rem;
-            right: 0.75rem;
-            background: rgba(6, 6, 6, 0.82);
-            backdrop-filter: blur(6px);
-            border: 1px dashed rgba(198, 163, 124, 0.45);
+            border: 1px solid var(--gold-primary);
+            background: linear-gradient(135deg, rgba(198, 163, 124, 0.16) 0%, rgba(154, 119, 83, 0.06) 100%);
             color: var(--gold-light);
-            font-size: 0.62rem;
-            letter-spacing: 0.14em;
-            padding: 0.35rem 0.6rem;
-            text-align: center;
+            font-size: 11px;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            pointer-events: none;
-            z-index: 10;
+            transition: all 0.3s ease;
         }
 
-        /* Scrollbar Customizada */
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2A241E;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gold-primary);
+        .btn-gold:hover {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-light) 100%);
+            color: #060606;
+            font-weight: 500;
         }
 
-        /* Animações suaves */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        /* Inputs customizados no tema escuro/dourado */
         .input-luxury {
-            background-color: #0B0B0B;
-            border: 1px solid var(--gold-border);
-            color: var(--text-primary);
-            padding: 0.85rem 1rem;
-            font-size: 0.82rem;
             width: 100%;
-            outline: none;
-            transition: border-color 0.3s ease;
+            background-color: #060606;
+            border: 1px solid rgba(198, 163, 124, 0.35);
+            color: var(--text-ivory);
+            padding: 0.65rem 0.85rem;
+            font-size: 0.8rem;
+            transition: border-color 0.2s ease;
         }
+
         .input-luxury:focus {
+            outline: none;
             border-color: var(--gold-light);
         }
-        .input-luxury::placeholder {
-            color: var(--text-muted);
-        }
 
-        /* ==========================================================================
-           ESTILOS DO PAINEL ADMINISTRATIVO (CMS) E EDIÇÃO DIRETA (INLINE INSPECTOR)
-           ========================================================================== */
+        /* Toggle Switch Dourado Admin */
         .toggle-switch {
             position: relative;
             display: inline-block;
             width: 44px;
-            height: 22px;
+            height: 24px;
             flex-shrink: 0;
         }
         .toggle-switch input {
@@ -275,503 +240,352 @@
             cursor: pointer;
             inset: 0;
             background-color: #1A1A1A;
-            border: 1px solid var(--gold-border);
+            border: 1px solid rgba(198, 163, 124, 0.35);
             transition: 0.3s;
-            border-radius: 999px;
+            border-radius: 9999px;
         }
         .toggle-slider:before {
             position: absolute;
             content: "";
-            height: 14px;
-            width: 14px;
+            height: 16px;
+            width: 16px;
             left: 3px;
             bottom: 3px;
-            background-color: #6E665F;
+            background-color: #A39B93;
             transition: 0.3s;
             border-radius: 50%;
         }
         .toggle-switch input:checked + .toggle-slider {
-            background-color: rgba(198, 163, 124, 0.22);
+            background-color: rgba(198, 163, 124, 0.25);
             border-color: var(--gold-light);
         }
         .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(22px);
+            transform: translateX(20px);
             background-color: var(--gold-light);
-            box-shadow: 0 0 8px var(--gold-primary);
         }
 
-        /* Destaque de Edição Direta na Página quando Inline Inspector está ativo */
+        /* Destaque no Modo de Edição Direta na Página */
         body.inline-edit-active [data-editable] {
-            outline: 1px dashed rgba(229, 200, 168, 0.55);
+            outline: 1px dashed var(--gold-light);
             outline-offset: 4px;
-            cursor: pointer !important;
-            position: relative;
-            transition: outline 0.2s ease, background-color 0.2s ease;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
         body.inline-edit-active [data-editable]:hover {
-            outline: 2px solid var(--gold-light);
             background-color: rgba(198, 163, 124, 0.12);
-        }
-        body.inline-edit-active [data-editable]::after {
-            content: "✎ Editar";
-            position: absolute;
-            top: -18px;
-            right: 0;
-            background: var(--gold-primary);
-            color: #060606;
-            font-family: var(--font-sans);
-            font-size: 9px;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            padding: 1px 6px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            z-index: 30;
-        }
-        body.inline-edit-active [data-editable]:hover::after {
-            opacity: 1;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-[#C6A37C]/20 selection:text-[#E5C8A8]">
+<body class="min-h-screen flex flex-col selection:bg-[#C6A37C] selection:text-[#060606]">
 
     <!-- ==========================================================================
-         DEFINIÇÃO DO ÍCONE SVG REUTILIZÁVEL (MANEQUIM DOURADO FIEL AO LOGO)
+         DEFINIÇÃO DO ÍCONE VETORIAL DO MANEQUIM DOURADO (FIEL AO LOGO IMG_6381)
          ========================================================================== -->
-    <svg width="0" height="0" class="hidden">
+    <svg class="hidden" aria-hidden="true">
         <symbol id="icon-mannequin" viewBox="0 0 40 84" fill="none">
-            <path d="M17.5 7H22.5M18.5 7V11.5C18.5 12.5 14 14 13.5 17.5C13 21 15.5 26 16.5 30.5C17 32.8 16.8 35 15 38.5C13.2 42 12.5 46.5 13.5 51.5C14.2 54.5 16.8 55.8 20 55.8C23.2 55.8 25.8 54.5 26.5 51.5C27.5 46.5 26.8 42 25 38.5C23.2 35 23 32.8 23.5 30.5C24.5 26 27 21 26.5 17.5C26 14 21.5 12.5 21.5 11.5V7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M15.5 16.5C17.2 18.2 20 18.5 22.5 17.2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
-            <path d="M18.5 23.5L17.5 27.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-            <line x1="20" y1="55.8" x2="20" y2="75" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-            <path d="M20 75C20 71 16.5 65.5 12 68.5C8.5 70.8 9.5 75.8 13.2 75.8C15.8 75.8 16.5 73.5 15 72" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-            <path d="M20 75C20 71 23.5 65.5 28 68.5C31.5 70.8 30.5 75.8 26.8 75.8C24.2 75.8 23.5 73.5 25 72" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-            <circle cx="20" cy="76.5" r="1.4" fill="currentColor"/>
+            <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
+            <path d="M16 9H24L22.5 14C26.5 17 28 22 26.5 28C25 34 23 38 23.5 43C24 48 27.5 53 28 58H12C12.5 53 16 48 16.5 43C17 38 15 34 13.5 28C12 22 13.5 17 17.5 14L16 9Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+            <path d="M16.2 42.5C18.5 43.8 21.5 43.8 23.8 42.5" stroke="currentColor" stroke-width="1" stroke-dasharray="1.5 1.5"/>
+            <line x1="20" y1="58" x2="20" y2="76" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M20 75C16 75 11 72 11 77.5C11 80 14.5 80.5 16 78.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M20 75C24 75 29 72 29 77.5C29 80 25.5 80.5 24 78.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
         </symbol>
     </svg>
 
     <!-- ==========================================================================
-         BARRA DE ANÚNCIO DO TOPO (DISCRETA E CONTROLÁVEL PELO ADMIN)
+         1. BARRA SUPERIOR DE COMUNICADO (TOPBAR)
          ========================================================================== -->
-    <div id="section-topbar" class="bg-[#030303] border-b border-[#C6A37C]/15 py-2.5 px-4 text-center">
-        <p id="txt-topbar" data-editable="texts.topbar" data-label="Texto da Barra de Aviso Superior" class="text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-[#A39B93]">
+    <div id="section-topbar" class="bg-[#040404] border-b border-[#C6A37C]/20 py-2.5 px-4 text-center">
+        <p id="txt-topbar" data-editable="texts.topbar" data-label="Comunicado da Barra de Topo" class="text-[9px] sm:text-[10px] tracking-[0.26em] uppercase text-[#E5C8A8]">
             Frete Cortesia para todo o Brasil em compras acima de R$ 1.500 • Atendimento Exclusivo via Concierge
         </p>
     </div>
 
     <!-- ==========================================================================
-         CABEÇALHO (HEADER) COM IDENTIDADE FIEL AO LOGO E ACESSO AO ADMIN
+         2. CABEÇALHO PRINCIPAL (COM IDENTIDADE FIEL AO LOGO E SEM QUEBRA NO MOBILE)
          ========================================================================== -->
-    <header class="sticky top-0 z-40 bg-[#060606]/95 backdrop-blur-md border-b border-[#C6A37C]/20 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-3 sm:px-8 h-24 sm:h-28 flex items-center justify-between gap-1 sm:gap-4">
+    <header class="sticky top-0 z-40 bg-[#060606]/95 backdrop-blur-md border-b border-[#C6A37C]/20">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-24 sm:h-28 flex items-center justify-between gap-2">
             
-            <!-- Botão Menu Mobile -->
-            <div class="flex lg:hidden items-center gap-1 sm:gap-2 shrink-0">
-                <button onclick="toggleMobileMenu()" aria-label="Abrir Menu" class="text-[#C6A37C] hover:text-[#E5C8A8] p-1.5 transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M4 7h16M4 12h12M4 17h16"/>
-                    </svg>
-                </button>
-                <button id="btn-mobile-search" onclick="toggleSearchBar()" aria-label="Buscar" class="text-[#C6A37C] hover:text-[#E5C8A8] p-1.5 transition">
+            <!-- Navegação Esquerda (Desktop) & Botão Menu (Mobile) -->
+            <div class="flex items-center gap-2 sm:gap-6 flex-1">
+                <button onclick="toggleMobileMenu()" aria-label="Abrir Menu" class="lg:hidden p-2 text-[#E5C8A8] hover:text-[#C6A37C]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="7" stroke-width="1.3"/>
-                        <path stroke-linecap="round" stroke-width="1.3" d="M20 20l-3.5-3.5"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M4 7h16M4 12h16M4 17h12"/>
                     </svg>
                 </button>
+                <button id="btn-mobile-search" onclick="toggleSearchBar()" aria-label="Buscar" class="lg:hidden p-2 text-[#A39B93] hover:text-[#E5C8A8]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                    </svg>
+                </button>
+
+                <nav class="hidden lg:flex items-center gap-7 text-[10px] tracking-[0.28em] uppercase text-[#A39B93]">
+                    <a href="#inicio" class="hover:text-[#E5C8A8] transition">Início</a>
+                    <a id="nav-link-colecoes" href="#colecoes" class="hover:text-[#E5C8A8] transition">Coleções</a>
+                    <a href="#catalogo" class="hover:text-[#E5C8A8] transition">Catálogo</a>
+                    <a id="nav-link-atelier" href="#atelier" class="hover:text-[#E5C8A8] transition">O Atelier</a>
+                </nav>
             </div>
 
-            <!-- Navegação Desktop (Esquerda) -->
-            <nav class="hidden lg:flex items-center space-x-7 text-[11px] tracking-[0.26em] uppercase text-[#A39B93] shrink-0">
-                <a href="#inicio" onclick="navigateToSection('inicio')" class="hover:text-[#E5C8A8] transition py-1">Início</a>
-                <a href="#colecoes" id="nav-link-colecoes" onclick="navigateToSection('colecoes')" class="hover:text-[#E5C8A8] transition py-1">Coleções</a>
-                <a href="#catalogo" onclick="filterByCategory('Todos')" class="hover:text-[#E5C8A8] transition py-1">Catálogo</a>
-                <a href="#atelier" id="nav-link-atelier" onclick="navigateToSection('atelier')" class="hover:text-[#E5C8A8] transition py-1">O Atelier</a>
-            </nav>
-
-            <!-- LOGO CENTRALIZADO (Sem quebra de linha no mobile e com J visível) -->
-            <a href="#inicio" onclick="navigateToSection('inicio')" class="flex flex-col items-center justify-center text-center group py-1 shrink-0 mx-auto lg:mx-0">
-                <span data-editable="texts.brandTop" data-label="Texto Superior do Logo" class="brand-top-el text-[7.5px] sm:text-[9px] tracking-[0.34em] sm:tracking-[0.42em] uppercase text-[#C6A37C] mb-0.5 font-light whitespace-nowrap">
+            <!-- Centro: Reprodução Fiel do Logotipo BOUTIQUE JG JENNIFER GARCIA -->
+            <a href="#inicio" class="flex flex-col items-center justify-center text-center shrink-0 whitespace-nowrap select-none group">
+                <span data-editable="texts.brandTop" data-label="Nome Superior do Logo" class="brand-top-el text-[7px] sm:text-[9px] tracking-[0.45em] uppercase text-[#C6A37C] mb-0.5">
                     BOUTIQUE
                 </span>
-                <div data-editable="texts.brandMonogram" data-label="Monograma Central" class="brand-mono-el monogram-jg text-3xl sm:text-4xl select-none whitespace-nowrap">
+                <div data-editable="texts.brandMonogram" data-label="Monograma Central" class="brand-mono-el monogram-jg text-2xl sm:text-4xl">
                     <span class="letter-j">J</span><span>G</span>
                 </div>
-                <span data-editable="texts.brandMain" data-label="Nome Principal da Marca" class="brand-main-el text-[8px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.34em] uppercase text-[#E5C8A8] mt-0.5 font-light whitespace-nowrap">
+                <span data-editable="texts.brandMain" data-label="Nome Principal do Logo" class="brand-main-el text-[8.5px] sm:text-[11px] tracking-[0.34em] sm:tracking-[0.38em] uppercase text-[#E5C8A8] mt-0.5">
                     JENNIFER GARCIA
                 </span>
             </a>
 
-            <!-- Ações à Direita (Admin, Busca, Favoritos, Sacola) -->
-            <div class="flex items-center space-x-1.5 sm:space-x-4 shrink-0">
-                <!-- Botão Discreto Painel Admin no Topo -->
-                <button onclick="openAdminPanel()" class="flex items-center gap-1.5 border border-[#C6A37C]/35 hover:border-[#E5C8A8] bg-[#111111] px-2 sm:px-2.5 py-1.5 text-[9px] tracking-[0.22em] uppercase text-[#E5C8A8] transition" title="Abrir Painel Administrativo (CMS)">
-                    <svg class="w-3.5 h-3.5 text-[#C6A37C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Ações Direita: Busca, Favoritos, Sacola e Admin Discreto -->
+            <div class="flex items-center justify-end gap-1.5 sm:gap-4 flex-1">
+                <button id="btn-desktop-search" onclick="toggleSearchBar()" class="hidden lg:flex items-center gap-1.5 text-[10px] tracking-[0.22em] uppercase text-[#A39B93] hover:text-[#E5C8A8] transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                    </svg>
+                    <span>Buscar</span>
+                </button>
+
+                <button onclick="toggleWishlistOnly()" aria-label="Favoritos" class="relative p-2 text-[#A39B93] hover:text-[#E5C8A8] transition" title="Ver Peças Favoritas">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                    <span id="wishlist-count" class="hidden absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#C6A37C] text-[#060606] text-[9px] font-bold flex items-center justify-center">0</span>
+                </button>
+
+                <button id="header-cart-btn" onclick="openCartDrawer()" class="flex items-center gap-2 border border-[#C6A37C]/40 hover:border-[#E5C8A8] px-2.5 sm:px-4 py-1.5 sm:py-2 transition">
+                    <span class="text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-[#E5C8A8] hidden sm:inline">Sacola</span>
+                    <span id="cart-badge" class="w-5 h-5 rounded-full bg-[#C6A37C]/20 border border-[#C6A37C] text-[10px] text-[#E5C8A8] flex items-center justify-center">0</span>
+                </button>
+
+                <button onclick="openAdminPanel()" title="Painel Administrativo (Ctrl+Shift+A)" class="p-2 text-[#6E665F] hover:text-[#C6A37C] transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                        <circle cx="12" cy="12" r="3" stroke-width="1.4"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
-                    <span class="hidden md:inline">Admin</span>
-                </button>
-
-                <button id="btn-desktop-search" onclick="toggleSearchBar()" class="hidden lg:flex items-center gap-2 text-[#A39B93] hover:text-[#E5C8A8] transition text-[11px] tracking-[0.22em] uppercase" title="Buscar peça">
-                    <svg class="w-4 h-4 text-[#C6A37C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="7" stroke-width="1.3"/>
-                        <path stroke-linecap="round" stroke-width="1.3" d="M20 20l-3.5-3.5"/>
-                    </svg>
-                    <span class="hidden xl:inline">Buscar</span>
-                </button>
-
-                <button onclick="toggleWishlistOnly()" id="btn-wishlist-filter" class="relative text-[#C6A37C] hover:text-[#E5C8A8] transition p-1" title="Meus Favoritos">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                    </svg>
-                    <span id="wishlist-count" class="hidden absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#C6A37C] text-[#060606] text-[9px] font-medium flex items-center justify-center">0</span>
-                </button>
-
-                <button id="header-cart-btn" onclick="openCartDrawer()" class="relative flex items-center gap-1.5 sm:gap-2.5 border border-[#C6A37C]/35 hover:border-[#E5C8A8] px-2.5 sm:px-4 py-1.5 sm:py-2 transition group" aria-label="Abrir Sacola de Compras">
-                    <svg class="w-4 h-4 text-[#C6A37C] group-hover:text-[#E5C8A8] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                    </svg>
-                    <span class="hidden sm:inline text-[10px] tracking-[0.25em] uppercase text-[#F5EFEA]">Sacola</span>
-                    <span id="cart-badge" class="text-[11px] font-medium text-[#E5C8A8] border-l border-[#C6A37C]/30 pl-1.5 sm:pl-2">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- Barra de Pesquisa Expansível -->
-        <div id="search-bar-container" class="hidden border-t border-[#C6A37C]/20 bg-[#0A0A0A] py-4 px-4 sm:px-8">
-            <div class="max-w-3xl mx-auto flex items-center gap-3">
-                <svg class="w-5 h-5 text-[#C6A37C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="11" cy="11" r="7" stroke-width="1.3"/>
-                    <path stroke-linecap="round" stroke-width="1.3" d="M20 20l-3.5-3.5"/>
-                </svg>
-                <input 
-                    type="text" 
-                    id="search-input" 
-                    oninput="handleSearchInput(this.value)"
-                    placeholder="Buscar por vestido de seda, blazer alfaiataria, clutch dourada..." 
-                    class="w-full bg-transparent text-[#F5EFEA] placeholder-[#6E665F] text-xs sm:text-sm tracking-wider focus:outline-none"
-                >
-                <button onclick="toggleSearchBar()" class="text-[10px] tracking-[0.25em] uppercase text-[#A39B93] hover:text-[#E5C8A8]">
-                    Fechar
-                </button>
+        <!-- Barra de Busca Expansível -->
+        <div id="search-bar-container" class="hidden border-t border-[#C6A37C]/20 bg-[#080808] py-3 px-4">
+            <div class="max-w-2xl mx-auto flex items-center gap-3">
+                <input type="text" id="search-input" oninput="handleSearchInput(this.value)" placeholder="Buscar por vestido, seda, blazer, clutch..." class="input-luxury">
+                <button onclick="toggleSearchBar()" class="text-xs uppercase tracking-widest text-[#A39B93] hover:text-[#E5C8A8] px-2">Fechar</button>
             </div>
+        </div>
+
+        <!-- Menu Mobile Overlay -->
+        <div id="mobile-menu-overlay" class="hidden lg:hidden border-t border-[#C6A37C]/20 bg-[#080808] px-6 py-6 space-y-4">
+            <nav class="flex flex-col space-y-3 text-xs tracking-[0.28em] uppercase text-[#E5C8A8]">
+                <a href="#inicio" onclick="toggleMobileMenu()" class="py-1">Início</a>
+                <a href="#colecoes" onclick="toggleMobileMenu()" class="py-1">Coleções</a>
+                <a href="#catalogo" onclick="toggleMobileMenu()" class="py-1">Catálogo</a>
+                <a href="#atelier" onclick="toggleMobileMenu()" class="py-1">O Atelier</a>
+                <button onclick="toggleMobileMenu(); openAdminPanel();" class="text-left py-1 text-[#C6A37C]">⚙ Painel Admin</button>
+            </nav>
         </div>
     </header>
 
     <!-- ==========================================================================
-         MENU LATERAL MOBILE (DRAWER)
-         ========================================================================== -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 z-50 hidden">
-        <div onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/80 backdrop-blur-xs"></div>
-        <aside class="fixed top-0 left-0 bottom-0 w-72 bg-[#080808] border-r border-[#C6A37C]/25 z-10 flex flex-col justify-between p-8">
-            <div>
-                <div class="flex items-center justify-between pb-6 border-b border-[#C6A37C]/20">
-                    <div class="brand-mono-el monogram-jg text-2xl gold-gradient-text">
-                        <span class="letter-j">J</span><span>G</span>
-                    </div>
-                    <button onclick="toggleMobileMenu()" class="text-[#A39B93] hover:text-[#E5C8A8] p-1">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
-                </div>
-                <nav class="mt-8 flex flex-col space-y-5 text-xs tracking-[0.28em] uppercase text-[#F5EFEA]">
-                    <a href="#inicio" onclick="toggleMobileMenu(); navigateToSection('inicio')" class="hover:text-[#C6A37C] transition">Início</a>
-                    <a href="#colecoes" onclick="toggleMobileMenu(); navigateToSection('colecoes')" class="hover:text-[#C6A37C] transition">Coleções</a>
-                    <a href="#catalogo" onclick="toggleMobileMenu(); filterByCategory('Todos')" class="hover:text-[#C6A37C] transition">Catálogo Completo</a>
-                    <a href="#atelier" onclick="toggleMobileMenu(); navigateToSection('atelier')" class="hover:text-[#C6A37C] transition">O Atelier JG</a>
-                    <button onclick="toggleMobileMenu(); openAdminPanel()" class="text-left text-[#E5C8A8] pt-4 border-t border-[#C6A37C]/20 flex items-center gap-2">
-                        <span>⚙ Painel Admin (CMS)</span>
-                    </button>
-                </nav>
-            </div>
-            <div class="pt-6 border-t border-[#C6A37C]/20 text-center">
-                <div class="jg-divider mb-4">
-                    <span class="jg-divider-line left"></span>
-                    <svg class="w-5 h-9 text-[#C6A37C]"><use href="#icon-mannequin"></use></svg>
-                    <span class="jg-divider-line right"></span>
-                </div>
-                <p class="brand-main-el text-[10px] tracking-[0.25em] uppercase text-[#A39B93]">JENNIFER GARCIA</p>
-            </div>
-        </aside>
-    </div>
-
-    <!-- ==========================================================================
          CONTEÚDO PRINCIPAL DA LOJA
          ========================================================================== -->
-    <main class="flex-grow">
+    <main class="flex-1">
 
-        <!-- 1. SEÇÃO HERO (INÍCIO) -->
-        <section id="inicio" class="relative py-12 sm:py-20 lg:py-24 px-4 sm:px-8 border-b border-[#C6A37C]/15 overflow-hidden">
-            <!-- Imagem de fundo opcional do Hero se configurada no Admin -->
-            <div id="hero-bg-layer" class="pointer-events-none absolute inset-0 bg-cover bg-center opacity-15 hidden"></div>
-            <div class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] rounded-full bg-[#C6A37C]/[0.04] blur-[130px]"></div>
+        <!-- 3. SEÇÃO HERO (MINIMALISTA E CENTRALIZADA PARA ESTÉTICA MOBILE/DESKTOP) -->
+        <section id="inicio" class="relative py-14 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            <div id="hero-bg-layer" class="hidden absolute inset-0 bg-cover bg-center opacity-20 pointer-events-none"></div>
 
-            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center relative z-10">
-                
-                <!-- Coluna Esquerda: Identidade Completa do Logo + Chamada da Coleção -->
-                <div class="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
-                    
-                    <!-- Composição Completa do Logo em Destaque -->
-                    <div class="inline-flex flex-col items-center p-6 sm:p-8 border border-[#C6A37C]/20 bg-[#0A0A0A]/85 mb-8 max-w-full">
-                        <span data-editable="texts.brandTop" data-label="Texto Superior do Logo" class="brand-top-el text-[10px] sm:text-[11px] tracking-[0.42em] uppercase text-[#C6A37C] mb-2 whitespace-nowrap">
-                            BOUTIQUE
-                        </span>
-                        <div data-editable="texts.brandMonogram" data-label="Monograma Central" class="brand-mono-el monogram-jg text-6xl sm:text-7xl my-1 whitespace-nowrap">
-                            <span class="letter-j">J</span><span>G</span>
-                        </div>
-                        <span data-editable="texts.brandMain" data-label="Nome Principal da Marca" class="brand-main-el text-xs sm:text-sm tracking-[0.32em] sm:tracking-[0.36em] uppercase text-[#E5C8A8] mt-2 font-light whitespace-nowrap">
-                            JENNIFER GARCIA
-                        </span>
-                        <div class="jg-divider mt-5 w-52 sm:w-64">
-                            <span class="jg-divider-line left"></span>
-                            <svg class="w-6 h-12 text-[#C6A37C]"><use href="#icon-mannequin"></use></svg>
-                            <span class="jg-divider-line right"></span>
-                        </div>
+            <div class="relative z-10 max-w-4xl mx-auto text-center space-y-6">
+                <!-- Brasão Completo do Logo na Abertura -->
+                <div class="flex flex-col items-center justify-center mb-4">
+                    <span class="brand-top-el text-[9px] sm:text-[11px] tracking-[0.5em] uppercase text-[#C6A37C] mb-1">BOUTIQUE</span>
+                    <div class="brand-mono-el monogram-jg text-6xl sm:text-8xl">
+                        <span class="letter-j">J</span><span>G</span>
                     </div>
-
-                    <p id="txt-hero-subtitle" data-editable="texts.heroSubtitle" data-label="Subtítulo do Hero" class="text-[11px] tracking-[0.35em] uppercase text-[#C6A37C] mb-3">
-                        Coleção Privée • Outono / Inverno
-                    </p>
-                    <h1 id="txt-hero-title" data-editable="texts.heroTitle" data-label="Título Principal do Hero" class="font-serif-jg text-4xl sm:text-5xl lg:text-6xl font-light text-[#F5EFEA] leading-[1.12] mb-6">
-                        A Essência da Elegância <span class="italic font-normal gold-gradient-text">Atemporal em Preto & Ouro</span>
-                    </h1>
-                    <p id="txt-hero-desc" data-editable="texts.heroDesc" data-label="Descrição do Hero" class="text-sm sm:text-base text-[#A39B93] max-w-xl leading-relaxed mb-9 font-light">
-                        Cortes arquitetônicos em seda pura, alfaiataria de alta precisão e acabamentos artesanais banhados em tons de bronze e champagne. Peças desenhadas para mulheres que celebram a sofisticação minimalista.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-                        <a href="#catalogo" class="btn-gold w-full sm:w-auto">
-                            <span id="txt-hero-cta" data-editable="texts.heroCta" data-label="Texto do Botão Principal">Explorar Coleção</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                            </svg>
-                        </a>
-                        <a href="#colecoes" class="text-[11px] tracking-[0.28em] uppercase text-[#A39B93] hover:text-[#E5C8A8] py-3 px-6 transition">
-                            Ver Editorial
-                        </a>
+                    <span class="brand-main-el text-xs sm:text-sm tracking-[0.42em] uppercase text-[#E5C8A8] mt-1 mb-4">JENNIFER GARCIA</span>
+                    <div class="mannequin-divider">
+                        <span class="line-left"></span>
+                        <svg class="w-5 h-10 text-[#C6A37C] shrink-0"><use href="#icon-mannequin"></use></svg>
+                        <span class="line-right"></span>
                     </div>
                 </div>
 
-                <!-- Coluna Direita: Quadro de Imagem Principal do Hero (Editável por URL ou Upload no Admin) -->
-                <div class="lg:col-span-5">
-                    <div data-editable="image.heroImage" data-label="Imagem Principal do Hero" class="relative mx-auto max-w-md lg:max-w-none p-3 border border-[#C6A37C]/30 bg-[#0A0A0A]">
-                        <div id="hero-featured-frame" class="placeholder-box aspect-[4/5] w-full flex flex-col items-center justify-center p-8 text-center border border-[#C6A37C]/15">
-                            <!-- Renderizado dinamicamente pelo estado do CMS -->
-                        </div>
-                    </div>
+                <span id="txt-hero-subtitle" data-editable="texts.heroSubtitle" data-label="Subtítulo do Hero" class="inline-block text-[10px] sm:text-xs tracking-[0.35em] uppercase text-[#C6A37C]">
+                    Coleção Privée • Outono / Inverno
+                </span>
+
+                <h1 id="txt-hero-title" data-editable="texts.heroTitle" data-label="Título Principal do Hero" class="font-serif-jg text-3xl sm:text-5xl lg:text-6xl font-light text-[#F5EFEA] leading-tight">
+                    A Essência da Elegância Atemporal em Preto & Ouro
+                </h1>
+
+                <p id="txt-hero-desc" data-editable="texts.heroDesc" data-label="Descrição do Hero" class="text-xs sm:text-sm text-[#A39B93] max-w-2xl mx-auto leading-relaxed font-light">
+                    Cortes arquitetônicos em seda pura, alfaiataria de alta precisão e acabamentos artesanais banhados em tons de bronze e champagne. Peças desenhadas para mulheres que celebram a sofisticação minimalista.
+                </p>
+
+                <div class="pt-4">
+                    <a href="#catalogo" class="btn-gold py-4 px-10">
+                        <span id="txt-hero-cta" data-editable="texts.heroCta" data-label="Texto do Botão Hero">Explorar Coleção</span>
+                    </a>
                 </div>
-
             </div>
         </section>
 
-        <!-- DIVISOR VISUAL COM MOTIVO DO LOGO (Hero -> Coleções) -->
-        <div id="divider-after-hero" class="section-divider py-12 px-4">
-            <div class="jg-divider">
-                <span class="jg-divider-line left"></span>
-                <svg class="w-6 h-11 text-[#C6A37C]"><use href="#icon-mannequin"></use></svg>
-                <span class="jg-divider-line right"></span>
+        <!-- Divisor Manequim Dourado -->
+        <div id="divider-after-hero" class="py-4 px-4">
+            <div class="mannequin-divider">
+                <span class="line-left"></span>
+                <svg class="w-4 h-8 text-[#C6A37C] shrink-0"><use href="#icon-mannequin"></use></svg>
+                <span class="line-right"></span>
             </div>
         </div>
 
-        <!-- 2. DESTAQUES DE COLEÇÕES (Dinâmico via Admin) -->
-        <section id="colecoes" class="py-8 sm:py-14 px-4 sm:px-8 max-w-7xl mx-auto">
-            <div class="text-center max-w-2xl mx-auto mb-14">
-                <span id="txt-col-subtitle" data-editable="texts.collectionsSubtitle" data-label="Subtítulo da Seção Coleções" class="text-[10px] tracking-[0.35em] uppercase text-[#C6A37C] block mb-2">Curadoria Exclusiva</span>
-                <h2 id="txt-col-title" data-editable="texts.collectionsTitle" data-label="Título da Seção Coleções" class="font-serif-jg text-3xl sm:text-4xl font-light text-[#F5EFEA]">Coleções em Destaque</h2>
+        <!-- 4. SEÇÃO DE COLEÇÕES EM DESTAQUE -->
+        <section id="colecoes" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span id="txt-col-subtitle" data-editable="texts.collectionsSubtitle" data-label="Subtítulo das Coleções" class="text-[10px] tracking-[0.35em] uppercase text-[#C6A37C] block mb-2">
+                    Curadoria Exclusiva
+                </span>
+                <h2 id="txt-col-title" data-editable="texts.collectionsTitle" data-label="Título das Coleções" class="font-serif-jg text-3xl sm:text-4xl font-light text-[#F5EFEA]">
+                    Coleções em Destaque
+                </h2>
             </div>
 
-            <div id="collections-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Cards das coleções renderizados via JS -->
+            <div id="collections-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Renderizado via JS -->
             </div>
         </section>
 
-        <!-- DIVISOR VISUAL COM MOTIVO DO LOGO (Coleções -> Catálogo) -->
-        <div id="divider-after-collections" class="section-divider py-12 px-4">
-            <div class="jg-divider">
-                <span class="jg-divider-line left"></span>
-                <svg class="w-6 h-11 text-[#C6A37C]"><use href="#icon-mannequin"></use></svg>
-                <span class="jg-divider-line right"></span>
+        <!-- Divisor Manequim Dourado -->
+        <div id="divider-after-collections" class="py-4 px-4">
+            <div class="mannequin-divider">
+                <span class="line-left"></span>
+                <svg class="w-4 h-8 text-[#C6A37C] shrink-0"><use href="#icon-mannequin"></use></svg>
+                <span class="line-right"></span>
             </div>
         </div>
 
-        <!-- 3. CATÁLOGO DE PRODUTOS COM FILTROS POR CATEGORIA -->
-        <section id="catalogo" class="py-8 sm:py-14 px-4 sm:px-8 max-w-7xl mx-auto">
-            
-            <!-- Cabeçalho do Catálogo -->
-            <div id="catalog-header-bar" class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6 border-b border-[#C6A37C]/20 pb-6">
+        <!-- 5. SEÇÃO CATÁLOGO DE PRODUTOS (GRADE 2x2 NO MOBILE E 4 COLUNAS NO DESKTOP) -->
+        <section id="catalogo" class="py-12 sm:py-16 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div id="catalog-header-bar" class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
                 <div>
-                    <span id="txt-cat-subtitle" data-editable="texts.catalogSubtitle" data-label="Subtítulo do Catálogo" class="text-[10px] tracking-[0.35em] uppercase text-[#C6A37C] block mb-2">Boutique JG</span>
-                    <h2 id="txt-cat-title" data-editable="texts.catalogTitle" data-label="Título do Catálogo" class="font-serif-jg text-3xl sm:text-4xl font-light text-[#F5EFEA]">Catálogo da Coleção</h2>
+                    <span id="txt-cat-subtitle" data-editable="texts.catalogSubtitle" data-label="Subtítulo do Catálogo" class="text-[10px] tracking-[0.35em] uppercase text-[#C6A37C] block mb-2">
+                        Boutique JG
+                    </span>
+                    <h2 id="txt-cat-title" data-editable="texts.catalogTitle" data-label="Título do Catálogo" class="font-serif-jg text-3xl sm:text-4xl font-light text-[#F5EFEA]">
+                        Catálogo da Coleção
+                    </h2>
                 </div>
 
                 <!-- Ordenação -->
-                <div id="catalog-sort-wrapper" class="flex items-center gap-3 self-start md:self-auto">
-                    <label for="sort-select" class="text-[10px] tracking-[0.25em] uppercase text-[#A39B93]">Ordenar:</label>
-                    <select id="sort-select" onchange="handleSortChange(this.value)" class="bg-[#0D0D0D] border border-[#C6A37C]/30 text-[#F5EFEA] text-xs px-3 py-2 focus:outline-none focus:border-[#E5C8A8]">
-                        <option value="featured">Destaques da Boutique</option>
-                        <option value="price-asc">Menor Preço</option>
-                        <option value="price-desc">Maior Preço</option>
+                <div class="flex items-center gap-3">
+                    <label for="sort-select" class="text-[10px] tracking-[0.22em] uppercase text-[#A39B93]">Ordenar:</label>
+                    <select id="sort-select" onchange="handleSortChange(this.value)" class="bg-[#0B0B0B] border border-[#C6A37C]/30 text-xs text-[#E5C8A8] px-3 py-2 focus:outline-none">
+                        <option value="featured">Destaques Atelier</option>
+                        <option value="price-asc">Menor Valor</option>
+                        <option value="price-desc">Maior Valor</option>
                         <option value="name">Ordem Alfabética</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Botões de Filtro de Categoria (Gerados dinamicamente pelo Admin) -->
-            <div id="category-filters" class="flex flex-wrap items-center gap-2 sm:gap-3 mb-10">
-                <!-- Preenchido via JS -->
+            <!-- Botões de Filtro por Categoria -->
+            <div id="category-filters" class="flex flex-wrap gap-2 mb-8">
+                <!-- Renderizado via JS -->
             </div>
 
-            <!-- Grid Dinâmico de Produtos -->
-            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
-                <!-- Preenchido via JS -->
+            <!-- Grade 2x2 no Mobile (grid-cols-2) e 4 Colunas no Desktop (lg:grid-cols-4) -->
+            <div id="products-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+                <!-- Renderizado via JS -->
             </div>
-
         </section>
 
-        <!-- DIVISOR VISUAL COM MOTIVO DO LOGO (Catálogo -> Atelier) -->
-        <div id="divider-after-catalog" class="section-divider py-12 px-4">
-            <div class="jg-divider">
-                <span class="jg-divider-line left"></span>
-                <svg class="w-6 h-11 text-[#C6A37C]"><use href="#icon-mannequin"></use></svg>
-                <span class="jg-divider-line right"></span>
+        <!-- Divisor Manequim Dourado -->
+        <div id="divider-after-catalog" class="py-4 px-4">
+            <div class="mannequin-divider">
+                <span class="line-left"></span>
+                <svg class="w-4 h-8 text-[#C6A37C] shrink-0"><use href="#icon-mannequin"></use></svg>
+                <span class="line-right"></span>
             </div>
         </div>
 
-        <!-- 4. SEÇÃO SOBRE O ATELIER / MANIFESTO DA MARCA -->
-        <section id="atelier" class="py-12 sm:py-20 px-4 sm:px-8 max-w-6xl mx-auto">
-            <div class="luxury-card p-8 sm:p-14 lg:p-16 relative overflow-hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-                    <div class="lg:col-span-7">
-                        <span class="text-[10px] tracking-[0.35em] uppercase text-[#C6A37C] block mb-3">A Assinatura JG</span>
-                        <h2 id="txt-atelier-title" data-editable="texts.atelierTitle" data-label="Título da Seção O Atelier" class="font-serif-jg text-3xl sm:text-4xl font-light text-[#F5EFEA] mb-6 leading-snug">
-                            Atelier Jennifer Garcia: Onde a Alta Costura Encontra a Intemporalidade
-                        </h2>
-                        <p id="txt-atelier-desc1" data-editable="texts.atelierDesc1" data-label="Primeiro Parágrafo O Atelier" class="text-sm text-[#A39B93] leading-relaxed mb-5">
-                            Cada peça da BOUTIQUE JG é concebida com atenção obsessiva ao caimento, seleção de tecidos nobres e aviamentos exclusivos em banho dourado envelhecido e bronze.
-                        </p>
-                        <p id="txt-atelier-desc2" data-editable="texts.atelierDesc2" data-label="Segundo Parágrafo O Atelier" class="text-sm text-[#A39B93] leading-relaxed mb-8">
-                            Oferecemos ajuste sob medida gratuito em nosso Atelier e consultoria de estilo personalizada para garantir que sua escolha vista com perfeição absoluta.
-                        </p>
-                        <div class="grid grid-cols-3 gap-4 pt-6 border-t border-[#C6A37C]/20 text-center sm:text-left">
-                            <div>
-                                <span class="font-serif-jg text-2xl sm:text-3xl text-[#E5C8A8] block">100%</span>
-                                <span class="text-[9px] tracking-[0.22em] uppercase text-[#A39B93]">Tecidos Nobres</span>
-                            </div>
-                            <div>
-                                <span class="font-serif-jg text-2xl sm:text-3xl text-[#E5C8A8] block">Sob Medida</span>
-                                <span class="text-[9px] tracking-[0.22em] uppercase text-[#A39B93]">Ajuste Cortesia</span>
-                            </div>
-                            <div>
-                                <span class="font-serif-jg text-2xl sm:text-3xl text-[#E5C8A8] block">VIP</span>
-                                <span class="text-[9px] tracking-[0.22em] uppercase text-[#A39B93]">Embalagem de Luxo</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-5 flex flex-col items-center justify-center border border-[#C6A37C]/25 bg-[#070707] p-10 text-center">
-                        <span class="brand-top-el text-[9px] tracking-[0.42em] uppercase text-[#C6A37C] mb-1">BOUTIQUE</span>
-                        <div class="brand-mono-el monogram-jg text-6xl gold-gradient-text my-1">
-                            <span class="letter-j">J</span><span>G</span>
-                        </div>
-                        <span class="brand-main-el text-[11px] tracking-[0.34em] uppercase text-[#E5C8A8] mt-1">JENNIFER GARCIA</span>
-                        
-                        <div class="jg-divider my-6">
-                            <span class="jg-divider-line left"></span>
-                            <svg class="w-6 h-12 text-[#C6A37C]"><use href="#icon-mannequin"></use></svg>
-                            <span class="jg-divider-line right"></span>
-                        </div>
-
-                        <p id="txt-atelier-quote" data-editable="texts.atelierQuote" data-label="Citação de Assinatura" class="font-serif-jg italic text-lg text-[#A39B93]">
-                            "A verdadeira elegância reside na simplicidade do traço e na nobreza do detalhe."
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <!-- 6. SEÇÃO O ATELIER / MANIFESTO DA MARCA -->
+        <section id="atelier" class="py-14 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
+            <span class="text-[10px] tracking-[0.35em] uppercase text-[#C6A37C] block">Alta Costura & Concierge</span>
+            <h2 id="txt-atelier-title" data-editable="texts.atelierTitle" data-label="Título O Atelier" class="font-serif-jg text-3xl sm:text-4xl font-light text-[#F5EFEA]">
+                Atelier Jennifer Garcia: Onde a Alta Costura Encontra a Intemporalidade
+            </h2>
+            <p id="txt-atelier-desc1" data-editable="texts.atelierDesc1" data-label="Parágrafo 1 O Atelier" class="text-xs sm:text-sm text-[#A39B93] leading-relaxed font-light">
+                Cada peça da BOUTIQUE JG é concebida com atenção obsessiva ao caimento, seleção de tecidos nobres e aviamentos exclusivos em banho dourado envelhecido e bronze.
+            </p>
+            <p id="txt-atelier-desc2" data-editable="texts.atelierDesc2" data-label="Parágrafo 2 O Atelier" class="text-xs sm:text-sm text-[#A39B93] leading-relaxed font-light">
+                Oferecemos ajuste sob medida gratuito em nosso Atelier e consultoria de estilo personalizada para garantir que sua escolha vista com perfeição absoluta.
+            </p>
+            <blockquote id="txt-atelier-quote" data-editable="texts.atelierQuote" data-label="Citação O Atelier" class="font-serif-jg italic text-xl sm:text-2xl text-[#E5C8A8] pt-2">
+                "A verdadeira elegância reside na simplicidade do traço e na nobreza do detalhe."
+            </blockquote>
         </section>
-
     </main>
 
     <!-- ==========================================================================
-         RODAPÉ (FOOTER) COM REDES SOCIAIS, NEWSLETTER E LINK ADMIN
+         7. RODAPÉ MINIMALISTA (IDENTIDADE DA MARCA, WHATSAPP E INSTAGRAM)
          ========================================================================== -->
-    <footer class="bg-[#040404] border-t border-[#C6A37C]/20 pt-16 pb-12 px-4 sm:px-8 mt-16">
-        <div class="max-w-7xl mx-auto">
-            
-            <!-- Topo do Footer com Logo -->
-            <div class="flex flex-col items-center text-center mb-14">
-                <span class="brand-top-el text-[9px] tracking-[0.42em] uppercase text-[#C6A37C]">BOUTIQUE</span>
-                <div class="brand-mono-el monogram-jg text-5xl gold-gradient-text my-1">
+    <footer class="bg-[#040404] border-t border-[#C6A37C]/25 pt-14 pb-10 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+            <!-- Logo no Rodapé -->
+            <div class="flex flex-col items-center">
+                <span class="brand-top-el text-[8px] tracking-[0.45em] uppercase text-[#C6A37C] mb-0.5">BOUTIQUE</span>
+                <div class="brand-mono-el monogram-jg text-4xl">
                     <span class="letter-j">J</span><span>G</span>
                 </div>
-                <span class="brand-main-el text-[11px] tracking-[0.34em] uppercase text-[#E5C8A8] mt-1">JENNIFER GARCIA</span>
-                <div class="jg-divider mt-4 max-w-xs">
-                    <span class="jg-divider-line left"></span>
-                    <svg class="w-5 h-10 text-[#C6A37C]"><use href="#icon-mannequin"></use></svg>
-                    <span class="jg-divider-line right"></span>
-                </div>
+                <span class="brand-main-el text-[10px] tracking-[0.38em] uppercase text-[#E5C8A8] mt-0.5">JENNIFER GARCIA</span>
             </div>
 
-            <!-- Contato & Concierge WhatsApp Centralizado (Sem Navegação e Sem Atendimento ao Cliente) -->
-            <div class="max-w-xl mx-auto pb-12 border-b border-[#C6A37C]/15 text-xs text-center">
-                <h4 class="text-[10px] tracking-[0.3em] uppercase text-[#E5C8A8] mb-4">Contato & Concierge WhatsApp</h4>
-                <ul class="space-y-2 text-[#A39B93]">
-                    <li id="txt-footer-phone" data-editable="texts.footerPhone" data-label="Telefone / WhatsApp no Rodapé">WhatsApp Concierge: (11) 99999-0000</li>
-                    <li id="txt-footer-email" data-editable="texts.footerEmail" data-label="E-mail no Rodapé">contato@boutiquejg.com.br</li>
-                    <li id="txt-footer-address" data-editable="texts.footerAddress" data-label="Endereço Físico no Rodapé">Jardins — São Paulo, SP</li>
-                    <li id="txt-footer-hours" data-editable="texts.footerHours" data-label="Horário de Atendimento">Seg a Sáb — 10h às 20h</li>
-                </ul>
-
-                <div class="mt-6 flex flex-wrap items-center justify-center gap-4">
-                    <a id="footer-whatsapp-cta" href="https://wa.me/5511999990000" target="_blank" rel="noopener noreferrer" class="btn-gold py-2.5 px-6 text-[10px]">
-                        <span>Atendimento via WhatsApp</span>
-                    </a>
-                </div>
-
-                <!-- Redes Sociais (Controlável pelo Admin) -->
-                <div id="footer-social-links" class="flex items-center justify-center gap-6 mt-6 pt-5 border-t border-[#C6A37C]/15">
-                    <a id="footer-instagram-link" data-editable="texts.instagramUrl" data-label="URL do Perfil no Instagram" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="text-[10px] tracking-[0.2em] uppercase text-[#C6A37C] hover:text-[#E5C8A8] flex items-center gap-2 transition">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <rect x="2" y="2" width="20" height="20" rx="5" stroke-width="1.5"/>
-                            <circle cx="12" cy="12" r="4" stroke-width="1.5"/>
-                            <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
-                        </svg>
-                        <span>Instagram</span>
-                    </a>
-                </div>
+            <!-- Dados de Contato & Concierge -->
+            <div class="space-y-1.5 text-xs text-[#A39B93] font-light">
+                <p id="txt-footer-phone" data-editable="texts.footerPhone" data-label="Telefone do Rodapé" class="text-[#E5C8A8]">WhatsApp Concierge: (11) 99999-0000</p>
+                <p id="txt-footer-email" data-editable="texts.footerEmail" data-label="E-mail do Rodapé">contato@boutiquejg.com.br</p>
+                <p id="txt-footer-address" data-editable="texts.footerAddress" data-label="Endereço do Rodapé">Jardins — São Paulo, SP</p>
+                <p id="txt-footer-hours" data-editable="texts.footerHours" data-label="Horário no Rodapé" class="text-[11px] text-[#6E665F]">Seg a Sáb — 10h às 20h</p>
             </div>
 
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#6E665F] gap-4">
-                <p id="txt-footer-copy" data-editable="texts.footerCopyright" data-label="Texto de Copyright">© 2026 BOUTIQUE JG — JENNIFER GARCIA. Todos os direitos reservados.</p>
-                <p class="tracking-[0.2em] uppercase text-[#A39B93]">Reserva Exclusiva • Atendimento Personalizado via Concierge</p>
+            <!-- Botão Atendimento via WhatsApp -->
+            <div class="flex justify-center">
+                <a id="footer-whatsapp-cta" href="https://wa.me/5511999990000" target="_blank" rel="noopener noreferrer" class="btn-gold py-3 px-8">
+                    Atendimento via WhatsApp
+                </a>
             </div>
+
+            <!-- Link Exclusivo do Instagram -->
+            <div id="footer-social-links" class="pt-4 border-t border-[#C6A37C]/15 flex justify-center">
+                <a id="footer-instagram-link" data-editable="texts.instagramUrl" data-label="URL do Instagram" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-[#C6A37C] hover:text-[#E5C8A8] transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <rect x="2" y="2" width="20" height="20" rx="5" stroke-width="1.4"/>
+                        <circle cx="12" cy="12" r="4" stroke-width="1.4"/>
+                        <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+                    </svg>
+                    <span>Instagram</span>
+                </a>
+            </div>
+
+            <p id="txt-footer-copy" data-editable="texts.footerCopyright" data-label="Copyright do Rodapé" class="text-[10px] tracking-[0.2em] uppercase text-[#6E665F] pt-2">
+                © 2026 BOUTIQUE JG — JENNIFER GARCIA. Todos os direitos reservados.
+            </p>
         </div>
     </footer>
 
     <!-- ==========================================================================
-         BOTÕES FLUTUANTES: WHATSAPP CONCIERGE + ATALHO ADMIN / EDIÇÃO DIRETA
+         BOTÃO FLUTUANTE: WHATSAPP CONCIERGE
          ========================================================================== -->
-    <!-- Botão Flutuante WhatsApp Concierge (Esquerda inferior para não colidir com Admin) -->
+    <!-- Botão Flutuante WhatsApp Concierge -->
     <a id="floating-whatsapp-btn" href="https://wa.me/5511999990000" target="_blank" rel="noopener noreferrer" class="fixed bottom-6 left-6 z-40 flex items-center gap-2.5 bg-[#080808]/95 border border-[#C6A37C]/50 hover:border-[#E5C8A8] px-4 py-3 shadow-2xl transition group">
         <span class="w-2 h-2 rounded-full bg-[#C6A37C] animate-pulse"></span>
         <span class="text-[10px] tracking-[0.24em] uppercase text-[#E5C8A8]">Concierge WhatsApp</span>
     </a>
-
-    <!-- Barra Flutuante de Controle Rápido Admin (Direita inferior) -->
-    <div class="fixed bottom-6 right-6 z-40 flex items-center gap-2">
-        <button id="floating-inline-toggle" onclick="toggleInlineEditMode()" class="bg-[#0B0B0B]/95 border border-[#C6A37C]/45 hover:border-[#E5C8A8] px-3.5 py-3 text-[10px] tracking-[0.2em] uppercase text-[#A39B93] hover:text-[#E5C8A8] shadow-2xl transition flex items-center gap-2" title="Ativar clique direto nos textos e imagens para editar">
-            <span id="inline-status-dot" class="w-2 h-2 rounded-full bg-[#6E665F]"></span>
-            <span class="hidden sm:inline">Edição na Página</span>
-        </button>
-        <button onclick="openAdminPanel()" class="bg-[#0B0B0B] border border-[#C6A37C] hover:border-[#E5C8A8] px-4 py-3 text-[10px] tracking-[0.24em] uppercase text-[#E5C8A8] shadow-2xl transition flex items-center gap-2">
-            <svg class="w-4 h-4 text-[#C6A37C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
-            </svg>
-            <span>Painel Admin</span>
-        </button>
-    </div>
 
     <!-- ==========================================================================
          PAINEL ADMINISTRATIVO COMPLETO (CMS EM TEMPO REAL - 5 ABAS)
@@ -2121,29 +1935,15 @@
                 identityInstaInput.value = t.instagramUrl || "https://www.instagram.com/";
             }
 
-            // 5. Imagem de Fundo e Quadro Principal do Hero
+            // 5. Imagem de Fundo Opcional do Hero
             const heroBg = document.getElementById("hero-bg-layer");
-            if (t.heroBgUrl && t.heroBgUrl.trim() !== "") {
-                heroBg.style.backgroundImage = `url('${t.heroBgUrl}')`;
-                heroBg.classList.remove("hidden");
-            } else {
-                heroBg.classList.add("hidden");
-            }
-
-            const heroFrame = document.getElementById("hero-featured-frame");
-            if (t.heroFeaturedImage && t.heroFeaturedImage.trim() !== "") {
-                heroFrame.innerHTML = `<img src="${t.heroFeaturedImage}" alt="Editorial Boutique JG" class="w-full h-full object-cover">`;
-            } else {
-                heroFrame.innerHTML = `
-                    <svg class="w-36 h-64 text-[#C6A37C]/75 mb-4" viewBox="0 0 120 220" fill="none">
-                        <circle cx="60" cy="24" r="2" fill="#E5C8A8"/>
-                        <path d="M52 35H68L65 48C76 54 82 65 78 82C74 98 69 108 72 125C76 148 92 185 96 205H24C28 185 44 148 48 125C51 108 46 98 42 82C38 65 44 54 55 48L52 35Z" stroke="#C6A37C" stroke-width="1.2"/>
-                        <path d="M48 125C56 129 64 129 72 125" stroke="#C6A37C" stroke-width="0.9" stroke-dasharray="2 2"/>
-                    </svg>
-                    <span class="font-serif-jg italic text-xl text-[#E5C8A8] mb-1">Lookbook Noir & Or</span>
-                    <span class="text-[10px] tracking-[0.28em] uppercase text-[#A39B93]">Alta Costura • Edição Limitada</span>
-                    <div class="placeholder-badge">[IMAGEM HERO: Altere no Painel Admin ou Clique Aqui no Modo Edição]</div>
-                `;
+            if (heroBg) {
+                if (t.heroBgUrl && t.heroBgUrl.trim() !== "") {
+                    heroBg.style.backgroundImage = `url('${t.heroBgUrl}')`;
+                    heroBg.classList.remove("hidden");
+                } else {
+                    heroBg.classList.add("hidden");
+                }
             }
 
             renderCollectionsSection();
@@ -2290,57 +2090,57 @@
                     : `${getSilhouetteSVG(product.silhouetteType, 0)}<div class="placeholder-badge">[${product.placeholderLabel || product.name}]</div>`;
 
                 const badgeHtml = product.badge
-                    ? `<span class="absolute top-6 left-6 z-20 px-2.5 py-1 bg-[#060606]/90 border border-[#C6A37C] text-[9px] tracking-[0.24em] uppercase text-[#E5C8A8]">${product.badge}</span>`
+                    ? `<span class="absolute top-3 left-3 sm:top-5 sm:left-5 z-20 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-[#060606]/90 border border-[#C6A37C] text-[8px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.24em] uppercase text-[#E5C8A8]">${product.badge}</span>`
                     : "";
 
                 // Se exibir preços estiver desativado, oculta a linha de preço completamente para não deixar espaço vazio
                 let priceBlockHtml = "";
                 if (showPrices) {
                     const innerPrice = product.promoPrice
-                        ? `<div>
-                               <span class="text-xs line-through text-[#6E665F] mr-2">${formatCurrency(product.price)}</span>
-                               <span class="font-serif-jg text-xl text-[#E5C8A8]">${formatCurrency(product.promoPrice)}</span>
+                        ? `<div class="flex flex-wrap items-baseline gap-1">
+                               <span class="text-[10px] sm:text-xs line-through text-[#6E665F]">${formatCurrency(product.price)}</span>
+                               <span class="font-serif-jg text-base sm:text-xl text-[#E5C8A8]">${formatCurrency(product.promoPrice)}</span>
                            </div>
-                           <span class="text-[10px] text-[#6E665F]">6x de ${formatCurrency(effectivePrice / 6)}</span>`
-                        : `<span class="font-serif-jg text-xl text-[#E5C8A8]">${formatCurrency(product.price)}</span>
-                           <span class="text-[10px] text-[#6E665F]">6x de ${formatCurrency(product.price / 6)}</span>`;
+                           <span class="text-[9px] sm:text-[10px] text-[#6E665F] block sm:inline">6x de ${formatCurrency(effectivePrice / 6)}</span>`
+                        : `<span class="font-serif-jg text-base sm:text-xl text-[#E5C8A8]">${formatCurrency(product.price)}</span>
+                           <span class="text-[9px] sm:text-[10px] text-[#6E665F] block sm:inline">6x de ${formatCurrency(product.price / 6)}</span>`;
 
-                    priceBlockHtml = `<div class="flex items-baseline justify-between mb-3">${innerPrice}</div>`;
+                    priceBlockHtml = `<div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-2.5 sm:mb-3 gap-0.5">${innerPrice}</div>`;
                 }
 
                 return `
-                    <article class="luxury-card group flex flex-col justify-between p-3 relative">
+                    <article onclick="openProductModal(${product.id})" class="luxury-card group flex flex-col justify-between p-2 sm:p-3 relative cursor-pointer">
                         ${badgeHtml}
                         <button 
                             onclick="toggleWishlistItem(event, ${product.id})" 
                             aria-label="Favoritar peça"
-                            class="absolute top-6 right-6 z-20 w-8 h-8 bg-[#060606]/80 border border-[#C6A37C]/30 flex items-center justify-center text-[#C6A37C] hover:border-[#E5C8A8] transition"
+                            class="absolute top-3 right-3 sm:top-5 sm:right-5 z-20 w-7 h-7 sm:w-8 sm:h-8 bg-[#060606]/80 border border-[#C6A37C]/30 flex items-center justify-center text-[#C6A37C] hover:border-[#E5C8A8] transition"
                         >
-                            <svg class="w-4 h-4" fill="${isFav ? '#C6A37C' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="${isFav ? '#C6A37C' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                             </svg>
                         </button>
 
-                        <div onclick="openProductModal(${product.id})" class="placeholder-box aspect-[4/5] w-full border border-[#C6A37C]/15 flex items-center justify-center cursor-pointer mb-4">
+                        <div class="placeholder-box aspect-[4/5] w-full border border-[#C6A37C]/15 flex items-center justify-center mb-2.5 sm:mb-4">
                             ${mediaContent}
                         </div>
 
-                        <div class="px-1 flex-1 flex flex-col justify-between">
+                        <div class="px-0.5 sm:px-1 flex-1 flex flex-col justify-between">
                             <div>
-                                <div class="flex items-center justify-between text-[9px] tracking-[0.28em] uppercase text-[#C6A37C] mb-1">
-                                    <span>${product.category}</span>
-                                    <span class="text-[#6E665F]">${product.sku}</span>
+                                <div class="flex items-center justify-between text-[8px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.28em] uppercase text-[#C6A37C] mb-1 truncate">
+                                    <span class="truncate">${product.category}</span>
+                                    <span class="hidden sm:inline text-[#6E665F]">${product.sku}</span>
                                 </div>
-                                <h3 onclick="openProductModal(${product.id})" class="font-serif-jg text-xl text-[#F5EFEA] group-hover:text-[#E5C8A8] transition cursor-pointer leading-snug mb-2">
+                                <h3 class="font-serif-jg text-sm sm:text-xl text-[#F5EFEA] group-hover:text-[#E5C8A8] transition leading-snug mb-1.5 sm:mb-2 line-clamp-2">
                                     ${product.name}
                                 </h3>
                             </div>
 
-                            <div class="pt-3 border-t border-[#C6A37C]/15 mt-2">
+                            <div class="pt-2 sm:pt-3 border-t border-[#C6A37C]/15 mt-1 sm:mt-2">
                                 ${priceBlockHtml}
 
-                                <button onclick="openProductModal(${product.id})" class="w-full py-2.5 border border-[#C6A37C]/40 hover:border-[#E5C8A8] hover:bg-[#C6A37C]/10 text-[10px] tracking-[0.25em] uppercase text-[#E5C8A8] transition">
-                                    ${product.badge === 'Esgotado' ? 'Ver Detalhes (Esgotado)' : ((siteConfig.visibility.showSizesSection === false || product.showSizes === false) ? 'Ver Detalhes & Cor' : 'Selecionar Tamanho & Cor')}
+                                <button type="button" class="w-full py-2 sm:py-2.5 border border-[#C6A37C]/40 group-hover:border-[#E5C8A8] group-hover:bg-[#C6A37C]/10 text-[8.5px] sm:text-[10px] tracking-[0.16em] sm:tracking-[0.25em] uppercase text-[#E5C8A8] transition">
+                                    ${product.badge === 'Esgotado' ? 'Esgotado' : ((siteConfig.visibility.showSizesSection === false || product.showSizes === false) ? 'Ver Detalhes' : 'Ver Tamanhos')}
                                 </button>
                             </div>
                         </div>
@@ -2761,10 +2561,12 @@
 
         function updateCartUI() {
             const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-            document.getElementById("cart-badge").textContent = totalItems;
+            const badgeEl = document.getElementById("cart-badge");
+            if (badgeEl) badgeEl.textContent = totalItems;
 
             const container = document.getElementById("cart-items-container");
             const footer = document.getElementById("cart-footer");
+            if (!container || !footer) return;
 
             if (cart.length === 0) {
                 container.innerHTML = `
