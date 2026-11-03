@@ -236,7 +236,7 @@
     <header class="sticky top-0 z-40 bg-[#060606]/95 backdrop-blur-md border-b border-[#C6A37C]/20">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 sm:gap-4">
             
-            <!-- Linha 1 no Mobile: Placa de Logotipo à Esquerda + Favoritos e Admin à Direita -->
+            <!-- Linha 1 no Mobile: Placa de Logotipo à Esquerda + Favoritos e Cadeado Admin à Direita -->
             <div class="flex items-center justify-between w-full md:w-auto">
                 <a href="#" onclick="filterByCategory('Todos'); return false;" class="logo-plaque px-3 sm:px-5 py-1.5 sm:py-2 rounded-xl flex items-center gap-2.5 sm:gap-3 shrink-0 select-none group">
                     <div class="monogram-jg text-xl sm:text-3xl">
@@ -248,7 +248,7 @@
                     </div>
                 </a>
 
-                <!-- Botões Favoritos e Admin visíveis ao lado da logo no mobile -->
+                <!-- Botões Favoritos e Cadeado Admin visíveis ao lado da logo no mobile -->
                 <div class="flex md:hidden items-center gap-2">
                     <button onclick="toggleWishlistOnly()" title="Filtrar Favoritos" class="relative p-2 bg-[#0D0D0D] border border-[#C6A37C]/35 rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -257,8 +257,12 @@
                         <span id="wishlist-count-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#C6A37C] text-[#060606] text-[9px] font-bold flex items-center justify-center">0</span>
                     </button>
 
-                    <button onclick="openAdminModal()" title="Painel Admin" class="px-3 py-2 bg-[#0D0D0D] border border-[#C6A37C]/40 rounded-xl text-[9.5px] tracking-[0.14em] uppercase text-[#E5C8A8] transition">
-                        ⚙ Admin
+                    <!-- Somente Ícone de Cadeado (Mobile) -->
+                    <button onclick="openAdminModal()" aria-label="Painel Administrativo" title="Painel Administrativo" class="p-2 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <rect x="5" y="11" width="14" height="10" rx="2" stroke-width="1.6"></rect>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 11V7a4 4 0 018 0v4"></path>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -304,7 +308,7 @@
                     </button>
                 </div>
 
-                <!-- Botões Favoritos e Admin no Desktop -->
+                <!-- Botões Favoritos e Cadeado Admin no Desktop -->
                 <button onclick="toggleWishlistOnly()" id="btn-wishlist-filter" title="Filtrar Favoritos" class="hidden md:flex relative p-2.5 bg-[#0D0D0D] border border-[#C6A37C]/35 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
@@ -312,8 +316,12 @@
                     <span id="wishlist-count" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#C6A37C] text-[#060606] text-[9px] font-bold flex items-center justify-center">0</span>
                 </button>
 
-                <button onclick="openAdminModal()" title="Painel Admin" class="hidden md:flex px-3 py-2.5 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[10px] tracking-[0.14em] uppercase text-[#E5C8A8] transition shrink-0">
-                    ⚙ Admin
+                <!-- Somente Ícone de Cadeado (Desktop) -->
+                <button onclick="openAdminModal()" aria-label="Painel Administrativo" title="Painel Administrativo" class="hidden md:flex p-2.5 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <rect x="5" y="11" width="14" height="10" rx="2" stroke-width="1.6"></rect>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 11V7a4 4 0 018 0v4"></path>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -1017,7 +1025,7 @@
             updateModalWhatsAppHref();
         }
 
-        // Renderizar Círculos de Categoria com largura padronizada para não colar textos
+        // Renderizar Círculos de Categoria com largura padronizada
         function renderCategories() {
             const container = document.getElementById('categories-stories');
             const otherCats = [];
@@ -1144,7 +1152,7 @@
                                 <span class="hidden sm:block text-[7px] tracking-[0.3em] uppercase text-[#A39B93] mt-0.5 truncate">${prod.category}</span>
                             </div>
 
-                            <!-- Quadro da Foto (Sem sobrepor o título acima) -->
+                            <!-- Quadro da Foto -->
                             <div class="aspect-[4/5] w-full overflow-hidden relative bg-[#090909]">
                                 <img src="${mainImg}" alt="${prod.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                                 
@@ -1172,7 +1180,7 @@
                             </div>
                         </div>
 
-                        <!-- Rodapé do Card com altura uniforme para manter os 3 cards da linha 100% alinhados -->
+                        <!-- Rodapé do Card -->
                         <div class="px-0.5 sm:px-1 flex flex-col justify-between flex-1 min-w-0">
                             <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-0.5 sm:gap-2 mb-1.5 sm:mb-2.5 min-w-0">
                                 <h3 class="text-[8.5px] sm:text-sm font-semibold uppercase tracking-tight sm:tracking-wide text-[#F5EFEA] group-hover:text-[#E5C8A8] transition truncate w-full">${prod.name}</h3>
@@ -1259,7 +1267,6 @@
             linkEl.href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
         }
 
-        // Abre Modal de Produto e trava a rolagem da página no fundo
         function openProductModal(id) {
             const prod = state.products.find(p => p.id === id);
             if (!prod) return;
