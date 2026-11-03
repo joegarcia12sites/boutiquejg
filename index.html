@@ -106,7 +106,7 @@
         /* Círculos de Categoria Compactos (Alinhados sem corte) */
         .story-ring {
             border-radius: 9999px;
-            padding: 2.5px;
+            padding: 2px;
             border: 1.5px solid rgba(198, 163, 124, 0.38);
             transition: all 0.25s ease;
             box-sizing: border-box;
@@ -137,11 +137,11 @@
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85);
         }
 
-        /* Pílulas de Tamanho responsivas para caberem na grade 3x3 mobile */
+        /* Pílulas de Tamanho responsivas para caberem perfeitamente na grade 3x3 mobile */
         .size-pill {
-            min-width: 16px;
+            min-width: 17px;
             height: 15px;
-            padding: 0 3px;
+            padding: 0 3.5px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -216,23 +216,30 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#C6A37C] selection:text-[#060606]">
 
-    <!-- CABEÇALHO -->
+    <!-- CABEÇALHO ALINHADO (SEM SOBREPOSIÇÃO NO MOBILE) -->
     <header class="sticky top-0 z-40 bg-[#060606]/95 backdrop-blur-md border-b border-[#C6A37C]/20">
-        <div class="max-w-7xl mx-auto px-2.5 sm:px-6 py-2.5 sm:py-3 flex flex-wrap md:flex-nowrap items-center justify-between gap-2.5 sm:gap-6">
+        <div class="max-w-7xl mx-auto px-2.5 sm:px-6 py-2.5 sm:py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 sm:gap-4">
             
-            <!-- Placa de Logotipo -->
-            <a href="#" onclick="filterByCategory('Todos'); return false;" class="logo-plaque px-3 sm:px-6 py-1.5 sm:py-2 rounded-xl flex items-center gap-2.5 sm:gap-3 shrink-0 select-none group">
-                <div class="monogram-jg text-xl sm:text-3xl">
-                    <span class="letter-j">J</span><span>G</span>
-                </div>
-                <div class="flex flex-col text-left border-l border-[#C6A37C]/30 pl-2.5 sm:pl-3">
-                    <span class="font-serif-jg text-sm sm:text-xl tracking-[0.18em] uppercase text-[#F5EFEA] font-semibold leading-none group-hover:text-[#E5C8A8] transition">BOUTIQUE JG</span>
-                    <span class="text-[7.5px] sm:text-[9px] tracking-[0.28em] uppercase text-[#C6A37C] mt-1">Jennifer Garcia</span>
-                </div>
-            </a>
+            <!-- Linha 1 no Mobile: Placa de Logotipo à Esquerda + Botão Admin à Direita -->
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <a href="#" onclick="filterByCategory('Todos'); return false;" class="logo-plaque px-3 sm:px-5 py-1.5 sm:py-2 rounded-xl flex items-center gap-2.5 sm:gap-3 shrink-0 select-none group">
+                    <div class="monogram-jg text-xl sm:text-3xl">
+                        <span class="letter-j">J</span><span>G</span>
+                    </div>
+                    <div class="flex flex-col text-left border-l border-[#C6A37C]/30 pl-2.5 sm:pl-3">
+                        <span class="font-serif-jg text-sm sm:text-xl tracking-[0.18em] uppercase text-[#F5EFEA] font-semibold leading-none group-hover:text-[#E5C8A8] transition">BOUTIQUE JG</span>
+                        <span class="text-[7.5px] sm:text-[9px] tracking-[0.28em] uppercase text-[#C6A37C] mt-1">Jennifer Garcia</span>
+                    </div>
+                </a>
 
-            <!-- Busca e Controles -->
-            <div class="flex items-center justify-end gap-1.5 sm:gap-3 flex-1 w-full md:w-auto order-3 md:order-2">
+                <!-- Botão Admin no Mobile (Fica alinhado no topo direito para liberar espaço na busca) -->
+                <button onclick="openAdminModal()" title="Painel Admin" class="md:hidden px-3 py-2 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[9.5px] tracking-[0.16em] uppercase text-[#E5C8A8] transition shrink-0">
+                    ⚙ Admin
+                </button>
+            </div>
+
+            <!-- Linha 2 no Mobile / Direita no Desktop: Barra de Busca Ampla + Alternador de Grade + Favoritos -->
+            <div class="flex items-center justify-end gap-2 sm:gap-3 flex-1 w-full md:w-auto">
                 <div class="relative flex-1 max-w-xl">
                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C6A37C] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"></path>
@@ -241,7 +248,7 @@
                         type="text" 
                         id="search-input" 
                         oninput="handleSearchInput(this.value)" 
-                        placeholder="Buscar produtos ou categorias..." 
+                        placeholder="Buscar produtos..." 
                         class="w-full bg-[#0D0D0D] border border-[#C6A37C]/35 focus:border-[#E5C8A8] rounded-full pl-9 sm:pl-11 pr-8 py-2 sm:py-2.5 text-xs sm:text-sm text-[#F5EFEA] placeholder-[#A39B93] focus:outline-none transition shadow-inner"
                     >
                     <button id="btn-clear-search" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-[#A39B93] hover:text-[#E5C8A8] text-xs">✕</button>
@@ -262,7 +269,7 @@
                             <rect x="16" y="16" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
                         </svg>
                     </button>
-                    <button id="btn-view-list" onclick="setGridView('list')" title="Grade Ampliada" class="p-1.5 sm:p-2 rounded-lg text-[#A39B93] hover:text-[#E5C8A8] transition">
+                    <button id="btn-view-list" onclick="setGridView('list')" title="Grade 2x2 Ampliada" class="p-1.5 sm:p-2 rounded-lg text-[#A39B93] hover:text-[#E5C8A8] transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <rect x="3" y="3" width="7" height="7" rx="1" stroke-width="1.8"></rect>
                             <rect x="14" y="3" width="7" height="7" rx="1" stroke-width="1.8"></rect>
@@ -280,37 +287,37 @@
                     <span id="wishlist-count" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#C6A37C] text-[#060606] text-[9px] font-bold flex items-center justify-center">0</span>
                 </button>
 
-                <!-- Botão Admin -->
-                <button onclick="openAdminModal()" title="Painel Admin" class="px-2.5 sm:px-3 py-2 sm:py-2.5 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[9px] sm:text-[10px] tracking-[0.16em] uppercase text-[#E5C8A8] transition shrink-0">
+                <!-- Botão Admin no Desktop -->
+                <button onclick="openAdminModal()" title="Painel Admin" class="hidden md:inline-flex px-3 py-2.5 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[10px] tracking-[0.16em] uppercase text-[#E5C8A8] transition shrink-0">
                     ⚙ Admin
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- CATEGORIAS COMPACTAS (STORIES ALINHADOS SEM CORTE) -->
+    <!-- CATEGORIAS COMPACTAS (SEM SOBREPOSIÇÃO DE TEXTO OU SETA NO MOBILE) -->
     <section class="bg-[#090909] border-b border-[#C6A37C]/15 py-1.5 sm:py-2 relative">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 relative flex items-center">
             <button onclick="scrollCategories(-240)" aria-label="Anterior" class="hidden sm:flex absolute left-2 z-20 w-7 h-7 rounded-full bg-[#060606]/95 border border-[#C6A37C]/50 text-[#E5C8A8] items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg">‹</button>
             
-            <div id="categories-stories" class="flex items-start gap-2.5 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth px-2 sm:px-9 py-2 w-full"></div>
+            <div id="categories-stories" class="flex items-start gap-2 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth px-1 sm:px-9 py-2 w-full"></div>
             
-            <button onclick="scrollCategories(240)" aria-label="Próximo" class="flex absolute right-1.5 sm:right-2 z-20 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#060606]/95 border border-[#C6A37C]/50 text-[#E5C8A8] items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg text-xs">›</button>
+            <button onclick="scrollCategories(240)" aria-label="Próximo" class="hidden sm:flex absolute right-2 z-20 w-7 h-7 rounded-full bg-[#060606]/95 border border-[#C6A37C]/50 text-[#E5C8A8] items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg">›</button>
         </div>
     </section>
 
     <!-- GRADE DE PRODUTOS 3x3 (MOBILE E DESKTOP) -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-2 sm:px-6 py-4 sm:py-8">
-        <div class="flex items-center justify-between mb-3.5 sm:mb-5 pb-2 border-b border-[#C6A37C]/15">
+        <div class="flex items-center justify-between mb-4 sm:mb-5 pb-2 border-b border-[#C6A37C]/15">
             <div class="flex items-center gap-1.5 sm:gap-2">
                 <span class="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-[#C6A37C]">Exibindo:</span>
-                <h1 id="current-category-label" class="font-serif-jg text-lg sm:text-2xl text-[#F5EFEA] font-semibold">Todos os Produtos</h1>
+                <h1 id="current-category-label" class="font-serif-jg text-lg sm:text-2xl text-[#F5EFEA] font-semibold">Todos</h1>
                 <span id="products-count-badge" class="px-1.5 py-0.5 text-[9px] sm:text-[10px] rounded-full bg-[#C6A37C]/15 border border-[#C6A37C]/30 text-[#E5C8A8]">0</span>
             </div>
 
             <div class="flex items-center gap-1.5 sm:gap-2">
                 <label for="sort-select" class="text-[10px] tracking-[0.2em] uppercase text-[#A39B93] hidden sm:inline">Ordenar:</label>
-                <select id="sort-select" onchange="handleSortChange(this.value)" class="bg-[#0D0D0D] border border-[#C6A37C]/30 rounded-lg text-[10px] sm:text-xs text-[#E5C8A8] px-2 py-1 sm:px-2.5 sm:py-1.5 focus:outline-none">
+                <select id="sort-select" onchange="handleSortChange(this.value)" class="bg-[#0D0D0D] border border-[#C6A37C]/30 rounded-lg text-[10px] sm:text-xs text-[#E5C8A8] px-2.5 py-1.5 focus:outline-none">
                     <option value="featured">Destaques</option>
                     <option value="price-asc">Menor Valor</option>
                     <option value="price-desc">Maior Valor</option>
@@ -318,10 +325,6 @@
                 </select>
             </div>
         </div>
-
-        <p class="text-[9.5px] sm:text-[11px] text-[#A39B93] mb-3 sm:mb-4 flex items-center gap-1">
-            <span>🔍 Toque em qualquer peça da grade para ampliar a foto e reservar seu tamanho.</span>
-        </p>
 
         <!-- Grade 3x3 nativa desde o mobile (grid-cols-3) -->
         <div id="products-grid" class="grid grid-cols-3 gap-2 sm:gap-5 lg:gap-6"></div>
@@ -748,7 +751,7 @@
     </footer>
 
     <script id="app-logic">
-        const STORAGE_KEY = 'boutique_jg_marbelle_v8';
+        const STORAGE_KEY = 'boutique_jg_marbelle_v9';
 
         /*__DEFAULT_DATA_START__*/
         const defaultData = {
@@ -985,7 +988,7 @@
             updateModalWhatsAppHref();
         }
 
-        // Renderizar Círculos de Categoria Compactos
+        // Renderizar Círculos de Categoria Compactos (Sem colar textos no mobile)
         function renderCategories() {
             const container = document.getElementById('categories-stories');
             const otherCats = [];
@@ -1017,8 +1020,8 @@
                 const isActive = activeCategory.toLowerCase() === catName.toLowerCase();
 
                 return `
-                    <button onclick="filterByCategory('${catName.replace(/'/g, "\\'")}')" class="story-item ${isActive ? 'active' : ''} flex flex-col items-center group shrink-0 w-14 sm:w-20 focus:outline-none">
-                        <div class="story-ring w-11 h-11 sm:w-14 sm:h-14 bg-[#121110] flex items-center justify-center overflow-hidden">
+                    <button onclick="filterByCategory('${catName.replace(/'/g, "\\'")}')" class="story-item ${isActive ? 'active' : ''} flex flex-col items-center group shrink-0 min-w-[60px] max-w-[74px] sm:min-w-[76px] sm:max-w-[90px] px-0.5 focus:outline-none">
+                        <div class="story-ring w-12 h-12 sm:w-14 sm:h-14 bg-[#121110] flex items-center justify-center overflow-hidden">
                             ${catName === 'Todos' ? `
                                 <div class="w-full h-full rounded-full bg-[#151310] flex items-center justify-center text-[#E5C8A8]">
                                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1032,7 +1035,7 @@
                                 <img src="${imgUrl}" alt="${catName}" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition duration-300">
                             `}
                         </div>
-                        <span class="mt-1 text-[8.5px] sm:text-[10px] tracking-[0.05em] uppercase text-center line-clamp-1 leading-tight ${isActive ? 'text-[#E5C8A8] font-semibold' : 'text-[#A39B93] group-hover:text-[#F5EFEA]'}">
+                        <span class="mt-1.5 text-[8px] sm:text-[10px] tracking-[0.04em] uppercase text-center truncate w-full leading-tight ${isActive ? 'text-[#E5C8A8] font-semibold' : 'text-[#A39B93] group-hover:text-[#F5EFEA]'}">
                             ${catName}
                         </span>
                     </button>
@@ -1050,7 +1053,7 @@
             return ['https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=700&q=80'];
         }
 
-        // Renderizar Grade 3x3 (Mobile e Desktop)
+        // Renderizar Grade 3x3 (Com selos posicionados dentro da foto para nunca sobrepor o texto BOUTIQUE JG)
         function renderProducts() {
             const grid = document.getElementById('products-grid');
             
@@ -1070,7 +1073,6 @@
             document.getElementById('current-category-label').textContent = showWishlistOnly ? 'Peças Favoritas' : activeCategory;
             document.getElementById('products-count-badge').textContent = filtered.length;
 
-            // Grade 3x3 tanto no mobile quanto no desktop (ou 2 colunas maiores se alternado)
             grid.className = viewMode === 'grid'
                 ? 'grid grid-cols-3 gap-2 sm:gap-5 lg:gap-6'
                 : 'grid grid-cols-2 gap-3 sm:gap-6';
@@ -1103,44 +1105,45 @@
                 return `
                     <article onclick="openProductModal(${prod.id})" class="catalog-card p-1.5 sm:p-3 flex flex-col justify-between cursor-pointer group relative">
                         <div class="bg-[#121110] rounded-md sm:rounded-lg overflow-hidden border border-[#C6A37C]/15 relative mb-1.5 sm:mb-3">
-                            ${prod.badge ? `
-                                <span class="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-20 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded bg-[#1A2E26]/95 border border-[#C6A37C]/50 text-[7px] sm:text-[10px] font-medium text-[#E5C8A8] shadow">
-                                    ${badgeIcon}
-                                </span>
-                            ` : ''}
-
-                            <button onclick="toggleWishlistItem(event, ${prod.id})" class="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-20 w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-[#060606]/80 border border-[#C6A37C]/35 flex items-center justify-center text-[#C6A37C] hover:scale-110 transition">
-                                <svg class="w-2.5 h-2.5 sm:w-4 sm:h-4" fill="${isFav ? '#C6A37C' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                </svg>
-                            </button>
-
-                            <!-- Topo interno da foto -->
-                            <div class="py-1 sm:py-2.5 px-1 sm:px-3 text-center bg-[#0B0A09] border-b border-[#C6A37C]/10">
-                                <span class="font-serif-jg text-[8.5px] sm:text-base tracking-[0.14em] sm:tracking-[0.22em] uppercase text-[#E5C8A8] block leading-none">BOUTIQUE JG</span>
+                            
+                            <!-- Faixa Superior Limpa (Sem sobreposição dos botões Novo! e Favorito) -->
+                            <div class="py-1 sm:py-2 px-1 sm:px-3 text-center bg-[#0B0A09] border-b border-[#C6A37C]/15">
+                                <span class="font-serif-jg text-[8px] sm:text-base tracking-[0.15em] sm:tracking-[0.22em] uppercase text-[#E5C8A8] block leading-none">BOUTIQUE JG</span>
                                 <span class="hidden sm:block text-[7px] tracking-[0.3em] uppercase text-[#A39B93] mt-0.5">${prod.category}</span>
                             </div>
 
-                            <!-- Imagem Compacta no Card 3x3 (Amplia ao clicar) -->
+                            <!-- Container da Foto Principal (Com Selo e Favorito posicionados dentro da foto) -->
                             <div class="aspect-[4/5] w-full overflow-hidden relative bg-[#090909]">
+                                ${prod.badge ? `
+                                    <span class="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-20 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded bg-[#1A2E26]/95 border border-[#C6A37C]/50 text-[6.5px] sm:text-[10px] font-medium text-[#E5C8A8] shadow leading-none">
+                                        ${badgeIcon}
+                                    </span>
+                                ` : ''}
+
+                                <button onclick="toggleWishlistItem(event, ${prod.id})" class="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-20 w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-[#060606]/85 border border-[#C6A37C]/40 flex items-center justify-center text-[#C6A37C] hover:scale-110 transition">
+                                    <svg class="w-2.5 h-2.5 sm:w-4 sm:h-4" fill="${isFav ? '#C6A37C' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </button>
+
                                 <img src="${mainImg}" alt="${prod.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                                 
                                 ${imgs.length > 1 ? `
-                                    <span class="absolute bottom-1 left-1 sm:bottom-3 sm:left-3 px-1 sm:px-2 py-0.5 rounded bg-[#060606]/85 border border-[#C6A37C]/35 text-[6.5px] sm:text-[9px] text-[#E5C8A8]">
+                                    <span class="absolute bottom-1 left-1 sm:bottom-2.5 sm:left-2.5 px-1 sm:px-2 py-0.5 rounded bg-[#060606]/85 border border-[#C6A37C]/35 text-[6.5px] sm:text-[9px] text-[#E5C8A8] leading-none">
                                         📷 ${imgs.length}
                                     </span>
                                 ` : ''}
 
-                                <div class="absolute bottom-1 right-1 sm:bottom-3 sm:right-3 w-6 h-6 sm:w-12 sm:h-12 rounded-full border sm:border-2 border-[#E5C8A8]/80 overflow-hidden shadow-md bg-[#060606]">
+                                <div class="absolute bottom-1 right-1 sm:bottom-2.5 sm:right-2.5 w-5 h-5 sm:w-11 sm:h-11 rounded-full border sm:border-2 border-[#E5C8A8]/85 overflow-hidden shadow-md bg-[#060606]">
                                     <img src="${thumbImg}" alt="" loading="lazy" class="w-full h-full object-cover ${imgs.length === 1 ? 'scale-150' : ''}">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Nome, Preço e Tamanhos -->
+                        <!-- Nome, Preço e Tamanhos Alinhados -->
                         <div class="px-0.5 sm:px-1 flex flex-col justify-between flex-1">
                             <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-0.5 sm:gap-2 ${shouldShowSizes ? 'mb-1.5 sm:mb-3' : 'mb-0.5'}">
-                                <h3 class="text-[8.5px] sm:text-sm font-semibold uppercase tracking-tight sm:tracking-wide text-[#F5EFEA] group-hover:text-[#E5C8A8] transition line-clamp-1">${prod.name}</h3>
+                                <h3 class="text-[8.5px] sm:text-sm font-semibold uppercase tracking-tight sm:tracking-wide text-[#F5EFEA] group-hover:text-[#E5C8A8] transition truncate">${prod.name}</h3>
                                 <span class="font-serif-jg text-[11px] sm:text-lg text-[#E5C8A8] font-semibold shrink-0 leading-tight">
                                     ${prod.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                 </span>
@@ -1660,89 +1663,4 @@
         }
 
         async function pullFromCloud(showNotification = true) {
-            if (!state.cloud || !state.cloud.url) return;
-            try {
-                const endpoint = formatFirebaseEndpoint(state.cloud.url, state.cloud.apiKey);
-                const headers = {};
-                if (state.cloud.apiKey && !endpoint.includes('firebase')) {
-                    headers['X-Master-Key'] = state.cloud.apiKey;
-                }
-                const res = await fetch(endpoint, { headers });
-                if (!res.ok) throw new Error('Falha HTTP ' + res.status);
-                const data = await res.json();
-                const payload = data.record || data;
-
-                if (payload && (payload.products || payload.categories)) {
-                    if (payload.whatsapp) state.whatsapp = formatWhatsAppNumber(payload.whatsapp);
-                    if (payload.whatsappDisplay) state.whatsappDisplay = payload.whatsappDisplay;
-                    if (payload.address) state.address = payload.address;
-                    if (payload.hours) state.hours = payload.hours;
-                    if (payload.whatsappBtnText) state.whatsappBtnText = payload.whatsappBtnText;
-                    if (payload.instagramUrl) state.instagramUrl = payload.instagramUrl;
-                    if (payload.copyrightText) state.copyrightText = payload.copyrightText;
-                    if (payload.categories) state.categories = payload.categories.filter(c => c.name.toLowerCase() !== 'todos');
-                    if (payload.products) state.products = payload.products;
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-                    renderFooter();
-                    renderCategories();
-                    renderProducts();
-                    if (!document.getElementById('admin-modal').classList.contains('hidden')) {
-                        renderAdminCategoriesList();
-                        renderAdminProductsList();
-                    }
-                    if (showNotification) alert('🔄 Dados carregados da nuvem com sucesso!');
-                } else if (showNotification) {
-                    alert('Nenhum dado encontrado na nuvem ainda. Clique em "Salvar & Sincronizar" primeiro.');
-                }
-            } catch (err) {
-                if (showNotification) alert('Erro ao carregar dados da nuvem: ' + err.message);
-            }
-        }
-
-        function downloadUpdatedIndexHtml() {
-            closeAdminModal();
-            closeAdminLoginModal();
-            closeProductModal();
-            closeFullscreenZoom();
-
-            let fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-            const newDefaultBlock = `/*__DEFAULT_DATA_START__*/\n        const defaultData = ${JSON.stringify(state, null, 12)};\n        /*__DEFAULT_DATA_END__*/`;
-            fullHtml = fullHtml.replace(/\/\*__DEFAULT_DATA_START__\*\/[\s\S]*?\/\*__DEFAULT_DATA_END__\*\//, newDefaultBlock);
-
-            const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'index.html';
-            a.click();
-        }
-
-        function downloadVercelJson() {
-            const vercelConfig = {
-                version: 2,
-                rewrites: [{ source: "/(.*)", destination: "/index.html" }]
-            };
-            const blob = new Blob([JSON.stringify(vercelConfig, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'vercel.json';
-            a.click();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            closeAdminModal();
-            closeAdminLoginModal();
-            closeProductModal();
-            closeFullscreenZoom();
-
-            renderFooter();
-            updateWishlistBadge();
-            renderCategories();
-            renderProducts();
-            renderFormImagesPreview();
-            if (state.cloud && state.cloud.enabled && state.cloud.url) {
-                pullFromCloud(false);
-            }
-        });
-    </script>
-</body>
-</html>
+            if (!state.cloud || !state
