@@ -2,7 +2,7 @@
 <html lang="pt-BR" class="scroll-smooth" style="--gold-primary: #C6A37C; --gold-light: #E5C8A8;">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BOUTIQUE JG | Jennifer Garcia — Catálogo Digital</title>
     <meta name="description" content="BOUTIQUE JG por Jennifer Garcia. Alta moda feminina, vestidos de seda, alfaiataria imperial e acessórios exclusivos em preto e dourado.">
     <meta name="theme-color" content="#060606">
@@ -30,7 +30,6 @@
             --text-muted: #A39B93;
         }
 
-        /* Garante que qualquer modal com a classe hidden nunca apareça ao atualizar a página */
         .hidden {
             display: none !important;
         }
@@ -40,6 +39,22 @@
             color: var(--text-ivory);
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
+        }
+
+        /* Trava total da página de fundo quando qualquer modal estiver aberto */
+        html.modal-open,
+        body.modal-open {
+            overflow: hidden !important;
+            height: 100% !important;
+            touch-action: none;
+        }
+
+        /* Rolagem suave isolada dentro dos modais */
+        .modal-scroll-area {
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
         }
 
         /* Barra de Rolagem Minimalista Noir & Or */
@@ -71,42 +86,40 @@
             font-family: 'Cormorant Garamond', Georgia, serif;
         }
 
-        /* Monograma JG com proteção total na haste inferior do 'J' para não cortar */
+        /* Monograma JG 100% compatível com iOS Safari e Android */
         .monogram-jg {
             font-family: 'Cormorant Garamond', Georgia, serif;
             font-weight: 400;
             letter-spacing: -0.04em;
-            line-height: 1.35;
+            line-height: 1.25;
             display: inline-flex;
             align-items: baseline;
-            padding: 0.08em 0.12em 0.24em;
-            overflow: visible;
-        }
-        .monogram-jg > span {
-            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-            line-height: 1.35;
-            padding: 0.04em 0.03em 0.22em;
+            color: var(--gold-light);
+            padding: 0.05em 0.08em 0.18em;
         }
         .monogram-jg .letter-j {
-            transform: translateY(0.06em);
-            margin-right: -0.03em;
+            display: inline-block;
+            position: relative;
+            top: 0.06em;
+            margin-right: -0.02em;
+            color: var(--gold-primary);
+        }
+        .monogram-jg .letter-g {
+            display: inline-block;
+            color: var(--gold-light);
         }
 
         /* Card do Logotipo */
         .logo-plaque {
             background: linear-gradient(145deg, #11100F 0%, #080808 100%);
             border: 1px solid rgba(198, 163, 124, 0.45);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), inset 0 0 12px rgba(198, 163, 124, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7), inset 0 0 12px rgba(198, 163, 124, 0.08);
         }
 
-        /* Círculos de Categoria Compactos (Alinhados sem corte) */
+        /* Círculos de Categoria Compactos */
         .story-ring {
             border-radius: 9999px;
-            padding: 2.5px;
+            padding: 2px;
             border: 1.5px solid rgba(198, 163, 124, 0.38);
             transition: all 0.25s ease;
             box-sizing: border-box;
@@ -115,35 +128,54 @@
         .story-item.active .story-ring {
             border-color: var(--gold-light);
             box-shadow: 0 0 10px rgba(198, 163, 124, 0.4);
-            transform: scale(1.05);
+            transform: scale(1.04);
         }
 
-        /* Card de Produto */
+        /* Card de Produto (Alinhamento estrito em 3x3) */
         .catalog-card {
             background-color: var(--bg-secondary);
-            border: 1.5px solid rgba(198, 163, 124, 0.28);
-            border-radius: 0.85rem;
-            transition: all 0.3s ease;
+            border: 1px solid rgba(198, 163, 124, 0.28);
+            border-radius: 0.5rem;
+            transition: all 0.25s ease;
+            min-width: 0;
+            width: 100%;
+        }
+        @media (min-width: 640px) {
+            .catalog-card {
+                border-width: 1.5px;
+                border-radius: 0.85rem;
+            }
         }
         .catalog-card:hover {
             border-color: var(--gold-light);
-            transform: translateY(-3px);
-            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.85);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85);
         }
 
+        /* Pílulas de Tamanho responsivas para caberem perfeitamente na grade 3x3 mobile */
         .size-pill {
-            min-width: 28px;
-            height: 24px;
-            padding: 0 6px;
+            min-width: 17px;
+            height: 15px;
+            padding: 0 2.5px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: 7.5px;
             font-weight: 600;
-            border-radius: 4px;
+            border-radius: 3px;
             background-color: #171614;
             border: 1px solid rgba(198, 163, 124, 0.35);
             color: var(--gold-light);
+            line-height: 1;
+        }
+        @media (min-width: 640px) {
+            .size-pill {
+                min-width: 28px;
+                height: 24px;
+                padding: 0 6px;
+                font-size: 10px;
+                border-radius: 4px;
+            }
         }
 
         .btn-gold {
@@ -200,25 +232,41 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#C6A37C] selection:text-[#060606]">
 
-    <!-- CABEÇALHO -->
+    <!-- CABEÇALHO PERFEITAMENTE ALINHADO NO MOBILE E DESKTOP -->
     <header class="sticky top-0 z-40 bg-[#060606]/95 backdrop-blur-md border-b border-[#C6A37C]/20">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex flex-wrap md:flex-nowrap items-center justify-between gap-3 sm:gap-6">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 sm:gap-4">
             
-            <!-- Placa de Logotipo -->
-            <a href="#" onclick="filterByCategory('Todos'); return false;" class="logo-plaque px-4 sm:px-6 py-1.5 sm:py-2 rounded-xl flex items-center gap-3 shrink-0 select-none group">
-                <div class="monogram-jg text-2xl sm:text-3xl">
-                    <span class="letter-j">J</span><span>G</span>
-                </div>
-                <div class="flex flex-col text-left border-l border-[#C6A37C]/30 pl-3">
-                    <span class="font-serif-jg text-base sm:text-xl tracking-[0.18em] uppercase text-[#F5EFEA] font-semibold leading-none group-hover:text-[#E5C8A8] transition">BOUTIQUE JG</span>
-                    <span class="text-[8px] sm:text-[9px] tracking-[0.3em] uppercase text-[#C6A37C] mt-1">Jennifer Garcia</span>
-                </div>
-            </a>
+            <!-- Linha 1 no Mobile: Placa de Logotipo à Esquerda + Favoritos e Admin à Direita -->
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <a href="#" onclick="filterByCategory('Todos'); return false;" class="logo-plaque px-3 sm:px-5 py-1.5 sm:py-2 rounded-xl flex items-center gap-2.5 sm:gap-3 shrink-0 select-none group">
+                    <div class="monogram-jg text-xl sm:text-3xl">
+                        <span class="letter-j">J</span><span class="letter-g">G</span>
+                    </div>
+                    <div class="flex flex-col text-left border-l border-[#C6A37C]/30 pl-2.5 sm:pl-3">
+                        <span class="font-serif-jg text-sm sm:text-xl tracking-[0.16em] uppercase text-[#F5EFEA] font-semibold leading-none group-hover:text-[#E5C8A8] transition">BOUTIQUE JG</span>
+                        <span class="text-[7px] sm:text-[9px] tracking-[0.26em] uppercase text-[#C6A37C] mt-1">Jennifer Garcia</span>
+                    </div>
+                </a>
 
-            <!-- Busca e Controles -->
-            <div class="flex items-center justify-end gap-2 sm:gap-3 flex-1 w-full md:w-auto order-3 md:order-2">
-                <div class="relative flex-1 max-w-xl">
-                    <svg class="w-4 h-4 text-[#C6A37C] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Botões Favoritos e Admin visíveis ao lado da logo no mobile -->
+                <div class="flex md:hidden items-center gap-2">
+                    <button onclick="toggleWishlistOnly()" title="Filtrar Favoritos" class="relative p-2 bg-[#0D0D0D] border border-[#C6A37C]/35 rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span id="wishlist-count-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#C6A37C] text-[#060606] text-[9px] font-bold flex items-center justify-center">0</span>
+                    </button>
+
+                    <button onclick="openAdminModal()" title="Painel Admin" class="px-3 py-2 bg-[#0D0D0D] border border-[#C6A37C]/40 rounded-xl text-[9.5px] tracking-[0.14em] uppercase text-[#E5C8A8] transition">
+                        ⚙ Admin
+                    </button>
+                </div>
+            </div>
+
+            <!-- Linha 2 no Mobile / Direita no Desktop: Busca Completa + Alternador de Grade + Ações Desktop -->
+            <div class="flex items-center gap-2 sm:gap-3 w-full md:flex-1 md:justify-end">
+                <div class="relative flex-1 md:max-w-md min-w-0">
+                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C6A37C] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"></path>
                     </svg>
                     <input 
@@ -226,14 +274,27 @@
                         id="search-input" 
                         oninput="handleSearchInput(this.value)" 
                         placeholder="Buscar produtos ou categorias..." 
-                        class="w-full bg-[#0D0D0D] border border-[#C6A37C]/35 focus:border-[#E5C8A8] rounded-full pl-11 pr-9 py-2 sm:py-2.5 text-xs sm:text-sm text-[#F5EFEA] placeholder-[#A39B93] focus:outline-none transition shadow-inner"
+                        class="w-full bg-[#0D0D0D] border border-[#C6A37C]/35 focus:border-[#E5C8A8] rounded-full pl-9 sm:pl-10 pr-8 py-2 text-xs sm:text-sm text-[#F5EFEA] placeholder-[#A39B93] focus:outline-none transition shadow-inner"
                     >
-                    <button id="btn-clear-search" onclick="clearSearch()" class="hidden absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A39B93] hover:text-[#E5C8A8] text-xs">✕</button>
+                    <button id="btn-clear-search" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-[#A39B93] hover:text-[#E5C8A8] text-xs">✕</button>
                 </div>
 
-                <!-- Visualização de Grade -->
-                <div class="flex items-center bg-[#0D0D0D] border border-[#C6A37C]/35 rounded-xl p-1 shrink-0">
-                    <button id="btn-view-grid" onclick="setGridView('grid')" title="Grade 3x3" class="p-1.5 sm:p-2 rounded-lg bg-[#C6A37C]/25 text-[#E5C8A8] transition">
+                <!-- Visualização de Grade (3x3 vs 2x2) -->
+                <div class="flex items-center bg-[#0D0D0D] border border-[#C6A37C]/35 rounded-xl p-0.5 sm:p-1 shrink-0">
+                    <button id="btn-view-grid" onclick="setGridView('grid')" title="Grade 3x3 Compacta" class="p-1.5 sm:p-2 rounded-lg bg-[#C6A37C]/25 text-[#E5C8A8] transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
+                            <rect x="9.5" y="3" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
+                            <rect x="16" y="3" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
+                            <rect x="3" y="9.5" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
+                            <rect x="9.5" y="9.5" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
+                            <rect x="16" y="9.5" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
+                            <rect x="3" y="16" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
+                            <rect x="9.5" y="16" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
+                            <rect x="16" y="16" width="5" height="5" rx="0.8" stroke-width="1.8"></rect>
+                        </svg>
+                    </button>
+                    <button id="btn-view-list" onclick="setGridView('list')" title="Grade 2 Colunas" class="p-1.5 sm:p-2 rounded-lg text-[#A39B93] hover:text-[#E5C8A8] transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <rect x="3" y="3" width="7" height="7" rx="1" stroke-width="1.8"></rect>
                             <rect x="14" y="3" width="7" height="7" rx="1" stroke-width="1.8"></rect>
@@ -241,52 +302,46 @@
                             <rect x="14" y="14" width="7" height="7" rx="1" stroke-width="1.8"></rect>
                         </svg>
                     </button>
-                    <button id="btn-view-list" onclick="setGridView('list')" title="Visualização Compacta" class="p-1.5 sm:p-2 rounded-lg text-[#A39B93] hover:text-[#E5C8A8] transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
                 </div>
 
-                <!-- Botão Favoritos -->
-                <button onclick="toggleWishlistOnly()" id="btn-wishlist-filter" title="Filtrar Favoritos" class="relative p-2.5 bg-[#0D0D0D] border border-[#C6A37C]/35 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition shrink-0">
+                <!-- Botões Favoritos e Admin no Desktop -->
+                <button onclick="toggleWishlistOnly()" id="btn-wishlist-filter" title="Filtrar Favoritos" class="hidden md:flex relative p-2.5 bg-[#0D0D0D] border border-[#C6A37C]/35 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                     </svg>
                     <span id="wishlist-count" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#C6A37C] text-[#060606] text-[9px] font-bold flex items-center justify-center">0</span>
                 </button>
 
-                <!-- Botão Admin -->
-                <button onclick="openAdminModal()" title="Painel Admin" class="px-3 py-2.5 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[10px] tracking-[0.18em] uppercase text-[#E5C8A8] transition shrink-0">
+                <button onclick="openAdminModal()" title="Painel Admin" class="hidden md:flex px-3 py-2.5 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[10px] tracking-[0.14em] uppercase text-[#E5C8A8] transition shrink-0">
                     ⚙ Admin
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- CATEGORIAS COMPACTAS (STORIES ALINHADOS SEM CORTE) -->
-    <section class="bg-[#090909] border-b border-[#C6A37C]/15 py-2 relative">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 relative flex items-center">
+    <!-- CATEGORIAS COMPACTAS E SIMÉTRICAS -->
+    <section class="bg-[#090909] border-b border-[#C6A37C]/15 py-2.5 relative">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 relative flex items-center">
             <button onclick="scrollCategories(-240)" aria-label="Anterior" class="hidden sm:flex absolute left-2 z-20 w-7 h-7 rounded-full bg-[#060606]/95 border border-[#C6A37C]/50 text-[#E5C8A8] items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg">‹</button>
             
-            <div id="categories-stories" class="flex items-start gap-3 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth px-2 sm:px-9 py-2.5 w-full"></div>
+            <div id="categories-stories" class="flex items-start gap-2 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth px-1 sm:px-9 py-1.5 w-full"></div>
             
-            <button onclick="scrollCategories(240)" aria-label="Próximo" class="flex absolute right-2 z-20 w-7 h-7 rounded-full bg-[#060606]/95 border border-[#C6A37C]/50 text-[#E5C8A8] items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg">›</button>
+            <button onclick="scrollCategories(240)" aria-label="Próximo" class="hidden sm:flex absolute right-2 z-20 w-7 h-7 rounded-full bg-[#060606]/95 border border-[#C6A37C]/50 text-[#E5C8A8] items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg">›</button>
         </div>
     </section>
 
-    <!-- GRADE DE PRODUTOS 3x3 -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-6 sm:py-8">
-        <div class="flex items-center justify-between mb-5 pb-2 border-b border-[#C6A37C]/15">
-            <div class="flex items-center gap-2">
-                <span class="text-[10px] tracking-[0.25em] uppercase text-[#C6A37C]">Exibindo:</span>
-                <h1 id="current-category-label" class="font-serif-jg text-xl sm:text-2xl text-[#F5EFEA] font-semibold">Todos os Produtos</h1>
-                <span id="products-count-badge" class="ml-1 px-2 py-0.5 text-[10px] rounded-full bg-[#C6A37C]/15 border border-[#C6A37C]/30 text-[#E5C8A8]">0</span>
+    <!-- GRADE DE PRODUTOS 3x3 ALINHADA (MOBILE E DESKTOP) -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-6 py-4 sm:py-8">
+        <div class="flex items-center justify-between mb-4 sm:mb-6 pb-2 border-b border-[#C6A37C]/15">
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-[#C6A37C]">Exibindo:</span>
+                <h1 id="current-category-label" class="font-serif-jg text-lg sm:text-2xl text-[#F5EFEA] font-semibold">Todos</h1>
+                <span id="products-count-badge" class="px-1.5 py-0.5 text-[9px] sm:text-[10px] rounded-full bg-[#C6A37C]/15 border border-[#C6A37C]/30 text-[#E5C8A8]">0</span>
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5 sm:gap-2">
                 <label for="sort-select" class="text-[10px] tracking-[0.2em] uppercase text-[#A39B93] hidden sm:inline">Ordenar:</label>
-                <select id="sort-select" onchange="handleSortChange(this.value)" class="bg-[#0D0D0D] border border-[#C6A37C]/30 rounded-lg text-xs text-[#E5C8A8] px-2.5 py-1.5 focus:outline-none">
+                <select id="sort-select" onchange="handleSortChange(this.value)" class="bg-[#0D0D0D] border border-[#C6A37C]/30 rounded-lg text-[10px] sm:text-xs text-[#E5C8A8] px-2 py-1 sm:px-2.5 sm:py-1.5 focus:outline-none">
                     <option value="featured">Destaques</option>
                     <option value="price-asc">Menor Valor</option>
                     <option value="price-desc">Maior Valor</option>
@@ -295,32 +350,41 @@
             </div>
         </div>
 
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"></div>
+        <!-- Grade 3x3 nativa desde o mobile (grid-cols-3) -->
+        <div id="products-grid" class="grid grid-cols-3 gap-2 sm:gap-5 lg:gap-6 items-stretch"></div>
     </main>
 
-    <!-- MODAL DE DETALHES COM CARROSSEL DE MÚLTIPLAS FOTOS E REDIRECIONAMENTO DIRETO AO WHATSAPP -->
-    <div id="product-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6">
-        <div class="bg-[#0B0B0B] border border-[#C6A37C]/45 rounded-2xl max-w-3xl w-full overflow-hidden shadow-2xl relative max-h-[92vh] flex flex-col md:flex-row">
-            <button onclick="closeProductModal()" class="absolute top-3 right-3 z-30 w-9 h-9 rounded-full bg-[#060606]/90 border border-[#C6A37C]/40 text-[#E5C8A8] flex items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition">✕</button>
+    <!-- MODAL DE DETALHES COM SCROLL SINCRONIZADO (TRAVA A PÁGINA NO FUNDO) -->
+    <div id="product-modal" onclick="if(event.target === this) closeProductModal()" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6">
+        
+        <!-- Container único de rolagem sincronizada para Mobile e Desktop -->
+        <div class="bg-[#0B0B0B] border border-[#C6A37C]/50 rounded-2xl max-w-3xl w-full max-h-[90vh] modal-scroll-area shadow-2xl relative flex flex-col md:flex-row">
+            
+            <button type="button" onclick="closeProductModal()" class="fixed md:absolute top-5 right-5 md:top-3 md:right-3 z-40 w-9 h-9 rounded-full bg-[#060606]/95 border border-[#C6A37C]/60 text-[#E5C8A8] flex items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-xl">
+                ✕
+            </button>
 
-            <!-- Coluna da Galeria / Carrossel -->
-            <div class="md:w-1/2 bg-[#121110] relative flex flex-col justify-between">
-                <div class="py-2 text-center border-b border-[#C6A37C]/15 bg-[#090909]">
-                    <span class="font-serif-jg text-sm tracking-[0.25em] uppercase text-[#E5C8A8]">BOUTIQUE JG</span>
+            <!-- Coluna da Galeria / Carrossel Ampliado -->
+            <div class="md:w-1/2 bg-[#121110] relative flex flex-col justify-between shrink-0">
+                <div class="py-2.5 text-center border-b border-[#C6A37C]/15 bg-[#090909]">
+                    <span class="font-serif-jg text-xs sm:text-sm tracking-[0.25em] uppercase text-[#E5C8A8]">BOUTIQUE JG</span>
                 </div>
 
-                <!-- Imagem Principal + Botões Anterior/Próximo -->
+                <!-- Imagem Principal Ampliada -->
                 <div class="aspect-[4/5] w-full relative overflow-hidden bg-[#080808] flex items-center justify-center">
-                    <img id="modal-img" src="" alt="" class="w-full h-full object-cover transition duration-300">
+                    <img id="modal-img" onclick="openFullscreenZoom()" src="" alt="" title="Toque para ampliar em tela cheia" class="w-full h-full object-cover transition duration-300 cursor-zoom-in">
                     
-                    <button type="button" id="carousel-prev" onclick="changeModalSlide(-1)" class="hidden absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-[#060606]/85 border border-[#C6A37C]/50 text-[#E5C8A8] flex items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg">
+                    <button type="button" onclick="openFullscreenZoom()" class="absolute top-2.5 left-2.5 z-20 px-2.5 py-1 rounded-full bg-[#060606]/85 border border-[#C6A37C]/40 text-[10px] text-[#E5C8A8] flex items-center gap-1 hover:bg-[#C6A37C] hover:text-[#060606] transition">
+                        <span>🔍 Tela Cheia</span>
+                    </button>
+
+                    <button type="button" id="carousel-prev" onclick="changeModalSlide(-1)" class="hidden absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-[#060606]/85 border border-[#C6A37C]/50 text-[#E5C8A8] flex items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg text-lg">
                         ‹
                     </button>
-                    <button type="button" id="carousel-next" onclick="changeModalSlide(1)" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-[#060606]/85 border border-[#C6A37C]/50 text-[#E5C8A8] flex items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg">
+                    <button type="button" id="carousel-next" onclick="changeModalSlide(1)" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-[#060606]/85 border border-[#C6A37C]/50 text-[#E5C8A8] flex items-center justify-center hover:bg-[#C6A37C] hover:text-[#060606] transition shadow-lg text-lg">
                         ›
                     </button>
 
-                    <!-- Contador de Fotos -->
                     <span id="carousel-counter" class="hidden absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-[#060606]/85 border border-[#C6A37C]/35 text-[10px] text-[#E5C8A8]">
                         1 / 1
                     </span>
@@ -331,12 +395,12 @@
             </div>
 
             <!-- Coluna de Informações da Peça -->
-            <div class="md:w-1/2 p-5 sm:p-7 flex flex-col justify-between overflow-y-auto">
+            <div class="md:w-1/2 p-5 sm:p-7 flex flex-col justify-between">
                 <div>
                     <span id="modal-category" class="text-[10px] tracking-[0.28em] uppercase text-[#C6A37C] block mb-1">Categoria</span>
-                    <h2 id="modal-title" class="font-serif-jg text-2xl sm:text-3xl text-[#F5EFEA] mb-2">Nome da Peça</h2>
-                    <div id="modal-price" class="font-serif-jg text-2xl text-[#E5C8A8] font-semibold mb-4">R$ 0,00</div>
-                    <p id="modal-desc" class="text-xs text-[#A39B93] leading-relaxed mb-6 border-t border-b border-[#C6A37C]/15 py-3"></p>
+                    <h2 id="modal-title" class="font-serif-jg text-2xl sm:text-3xl text-[#F5EFEA] mb-1.5">Nome da Peça</h2>
+                    <div id="modal-price" class="font-serif-jg text-2xl text-[#E5C8A8] font-semibold mb-3">R$ 0,00</div>
+                    <p id="modal-desc" class="text-xs text-[#A39B93] leading-relaxed mb-5 border-t border-b border-[#C6A37C]/15 py-3"></p>
 
                     <div id="modal-sizes-wrapper" class="mb-6">
                         <label class="block text-[10px] tracking-[0.22em] uppercase text-[#E5C8A8] mb-2.5">Selecione o Tamanho:</label>
@@ -344,14 +408,19 @@
                     </div>
                 </div>
 
-                <div class="space-y-2.5 pt-3 border-t border-[#C6A37C]/20">
-                    <!-- Link Direto para o WhatsApp Cadastrado -->
+                <div class="pt-3 border-t border-[#C6A37C]/20">
                     <a id="modal-whatsapp-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-gold w-full py-3.5 rounded-lg font-medium flex items-center justify-center gap-2">
                         <span>Reservar Peça no WhatsApp</span>
                     </a>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- LIGHTBOX DE ZOOM TELA CHEIA -->
+    <div id="fullscreen-zoom-modal" onclick="closeFullscreenZoom()" class="fixed inset-0 z-[60] bg-black/95 hidden flex items-center justify-center p-2 cursor-zoom-out">
+        <button type="button" onclick="closeFullscreenZoom()" class="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-[#0B0B0B] border border-[#C6A37C]/50 text-[#E5C8A8] flex items-center justify-center text-lg">✕</button>
+        <img id="fullscreen-zoom-img" src="" alt="" class="max-w-full max-h-[92vh] object-contain rounded-lg border border-[#C6A37C]/30 shadow-2xl">
     </div>
 
     <!-- MODAL DE LOGIN ADMIN (SOMENTE SENHA) -->
@@ -374,40 +443,34 @@
     </div>
 
     <!-- PAINEL ADMINISTRATIVO COMPLETO COM ABAS -->
-    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6">
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden flex items-center justify-center p-2.5 sm:p-6">
         <div class="bg-[#0B0B0B] border border-[#C6A37C]/50 rounded-2xl max-w-5xl w-full max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
             
-            <!-- Topo do Modal Admin -->
-            <div class="px-6 py-4 border-b border-[#C6A37C]/25 flex items-center justify-between bg-[#060606]">
+            <div class="px-5 sm:px-6 py-4 border-b border-[#C6A37C]/25 flex items-center justify-between bg-[#060606] shrink-0">
                 <div>
-                    <h2 class="font-serif-jg text-2xl text-[#E5C8A8]">Painel Administrativo — Boutique JG</h2>
-                    <p class="text-[11px] text-[#A39B93]">Gerencie catálogo, múltiplas fotos, rodapé de atendimento e sincronização em tempo real.</p>
+                    <h2 class="font-serif-jg text-xl sm:text-2xl text-[#E5C8A8]">Painel Administrativo — Boutique JG</h2>
+                    <p class="text-[10px] sm:text-[11px] text-[#A39B93]">Gerencie catálogo, múltiplas fotos, rodapé de atendimento e sincronização em tempo real.</p>
                 </div>
-                <button onclick="closeAdminModal()" class="px-3 py-1.5 border border-[#C6A37C]/40 rounded-lg text-xs text-[#E5C8A8] hover:bg-[#C6A37C] hover:text-[#060606] transition">Fechar ✕</button>
+                <button onclick="closeAdminModal()" class="px-3 py-1.5 border border-[#C6A37C]/40 rounded-lg text-xs text-[#E5C8A8] hover:bg-[#C6A37C] hover:text-[#060606] transition shrink-0">Fechar ✕</button>
             </div>
 
-            <!-- Navegação por Abas do Admin -->
-            <div class="flex flex-wrap border-b border-[#C6A37C]/20 bg-[#090909] px-6 gap-2 pt-2">
-                <button type="button" id="tab-btn-catalog" onclick="switchAdminTab('catalog')" class="px-4 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.18em] uppercase font-semibold border-b-2 border-[#C6A37C] text-[#E5C8A8] transition">
+            <div class="flex flex-wrap border-b border-[#C6A37C]/20 bg-[#090909] px-4 sm:px-6 gap-2 pt-2 shrink-0">
+                <button type="button" id="tab-btn-catalog" onclick="switchAdminTab('catalog')" class="px-3 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.16em] uppercase font-semibold border-b-2 border-[#C6A37C] text-[#E5C8A8] transition">
                     Catálogo & Categorias
                 </button>
-                <button type="button" id="tab-btn-cloud" onclick="switchAdminTab('cloud')" class="px-4 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.18em] uppercase font-semibold border-b-2 border-transparent text-[#A39B93] hover:text-[#E5C8A8] transition flex items-center gap-1.5">
+                <button type="button" id="tab-btn-cloud" onclick="switchAdminTab('cloud')" class="px-3 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.16em] uppercase font-semibold border-b-2 border-transparent text-[#A39B93] hover:text-[#E5C8A8] transition flex items-center gap-1.5">
                     <span>☁ Nuvem & Exportação</span>
                 </button>
-                <button type="button" id="tab-btn-settings" onclick="switchAdminTab('settings')" class="px-4 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.18em] uppercase font-semibold border-b-2 border-transparent text-[#A39B93] hover:text-[#E5C8A8] transition">
+                <button type="button" id="tab-btn-settings" onclick="switchAdminTab('settings')" class="px-3 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.16em] uppercase font-semibold border-b-2 border-transparent text-[#A39B93] hover:text-[#E5C8A8] transition">
                     Contato, Instagram & Senha
                 </button>
             </div>
 
-            <!-- Conteúdo das Abas -->
-            <div class="p-5 sm:p-6 overflow-y-auto flex-1 space-y-6">
+            <div class="p-4 sm:p-6 modal-scroll-area flex-1 space-y-6">
 
-                <!-- ==============================================================
-                     ABA 1: CATÁLOGO DE PEÇAS (MÚLTIPLAS FOTOS) & CATEGORIAS
-                     ============================================================== -->
+                <!-- ABA 1: CATÁLOGO DE PEÇAS & CATEGORIAS -->
                 <div id="admin-tab-catalog" class="space-y-6">
                     
-                    <!-- Gerenciar Ícones Redondos das Categorias -->
                     <div class="bg-[#11100F] border border-[#C6A37C]/25 rounded-xl p-4 sm:p-5 space-y-4">
                         <div class="flex items-center justify-between border-b border-[#C6A37C]/15 pb-2">
                             <div>
@@ -441,7 +504,7 @@
                         <div id="admin-categories-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 pt-2"></div>
                     </div>
 
-                    <!-- Formulário de Adição / Edição de Peça (Com Galeria de Múltiplas Fotos) -->
+                    <!-- Formulário de Adição / Edição de Peça -->
                     <form id="product-form" onsubmit="saveProduct(event)" class="bg-[#11100F] border border-[#C6A37C]/25 rounded-xl p-4 sm:p-5 space-y-4">
                         <div class="flex items-center justify-between border-b border-[#C6A37C]/15 pb-2">
                             <h3 id="form-title" class="text-xs tracking-[0.22em] uppercase text-[#E5C8A8] font-semibold">Adicionar / Editar Peça</h3>
@@ -464,7 +527,6 @@
                                 <input type="number" step="0.01" id="prod-price" required class="input-luxury" placeholder="249.90">
                             </div>
 
-                            <!-- Galeria de Múltiplas Fotos da Peça -->
                             <div class="sm:col-span-3 bg-[#0B0A09] border border-[#C6A37C]/20 rounded-xl p-3.5 space-y-3">
                                 <div class="flex items-center justify-between">
                                     <label class="block text-[10px] uppercase tracking-wider text-[#E5C8A8] font-semibold">Fotos da Peça (Adicione 1 ou mais fotos para o Carrossel) *</label>
@@ -484,7 +546,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Pré-visualização das Fotos Adicionadas -->
                                 <div id="form-images-preview" class="flex flex-wrap gap-2.5 pt-1"></div>
                             </div>
 
@@ -499,7 +560,6 @@
                             </div>
                         </div>
 
-                        <!-- Configuração de Exibição e Edição de Tamanhos -->
                         <div class="bg-[#0B0A09] border border-[#C6A37C]/20 rounded-xl p-3.5 space-y-3">
                             <div class="flex flex-wrap items-center justify-between gap-2">
                                 <label class="flex items-center gap-2.5 cursor-pointer select-none">
@@ -530,16 +590,13 @@
                         <button type="submit" class="btn-gold-solid px-6 py-3 rounded-lg w-full sm:w-auto">Salvar Produto no Catálogo</button>
                     </form>
 
-                    <!-- Lista de Produtos -->
                     <div>
                         <h3 class="text-xs tracking-[0.22em] uppercase text-[#C6A37C] mb-3">Peças no Catálogo</h3>
                         <div id="admin-products-list" class="space-y-2"></div>
                     </div>
                 </div>
 
-                <!-- ==============================================================
-                     ABA 2: SINCRONIZAÇÃO EM NUVEM & EXPORTAÇÃO
-                     ============================================================== -->
+                <!-- ABA 2: SINCRONIZAÇÃO EM NUVEM & EXPORTAÇÃO -->
                 <div id="admin-tab-cloud" class="hidden">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
                         
@@ -605,12 +662,9 @@
                     </div>
                 </div>
 
-                <!-- ==============================================================
-                     ABA 3: ATENDIMENTO WHATSAPP, RODAPÉ, INSTAGRAM E SENHA
-                     ============================================================== -->
+                <!-- ABA 3: ATENDIMENTO WHATSAPP, RODAPÉ, INSTAGRAM E SENHA -->
                 <div id="admin-tab-settings" class="hidden space-y-6">
                     
-                    <!-- Configuração Completa do Rodapé de Atendimento, Instagram e Direitos -->
                     <div class="bg-[#11100F] border border-[#C6A37C]/25 rounded-xl p-5 space-y-4">
                         <div class="border-b border-[#C6A37C]/15 pb-2">
                             <h3 class="text-xs tracking-[0.2em] uppercase text-[#E5C8A8] font-semibold">Atendimento via WhatsApp, Endereço, Instagram & Direitos (Rodapé)</h3>
@@ -669,23 +723,17 @@
         </div>
     </div>
 
-    <!-- ==========================================================================
-         RODAPÉ DE ATENDIMENTO, INSTAGRAM E DIREITOS RESERVADOS
-         ========================================================================== -->
+    <!-- RODAPÉ DE ATENDIMENTO, INSTAGRAM E DIREITOS RESERVADOS -->
     <footer class="bg-[#050505] border-t border-[#C6A37C]/15 mt-14 select-none">
         
-        <!-- Bloco Principal Centralizado -->
-        <div class="max-w-3xl mx-auto px-4 pt-14 pb-12 text-center flex flex-col items-center">
-            
-            <!-- Identidade Visual Vertical: BOUTIQUE / JG (sem corte no J) / JENNIFER GARCIA -->
-            <span class="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-[#C6A37C] mb-0.5">BOUTIQUE</span>
-            <div class="monogram-jg text-5xl sm:text-6xl my-0.5">
-                <span class="letter-j">J</span><span>G</span>
+        <div class="max-w-3xl mx-auto px-4 pt-12 pb-10 text-center flex flex-col items-center">
+            <span class="text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-[#C6A37C] mb-1">BOUTIQUE</span>
+            <div class="monogram-jg text-5xl sm:text-6xl my-1">
+                <span class="letter-j">J</span><span class="letter-g">G</span>
             </div>
-            <span class="text-[10px] sm:text-xs tracking-[0.38em] uppercase text-[#E5C8A8] mt-0.5 mb-9">JENNIFER GARCIA</span>
+            <span class="text-[10px] sm:text-xs tracking-[0.38em] uppercase text-[#E5C8A8] mt-1 mb-8">JENNIFER GARCIA</span>
 
-            <!-- Dados de Atendimento Editáveis -->
-            <div class="space-y-2 mb-9">
+            <div class="space-y-2 mb-8">
                 <p id="footer-whatsapp-display" class="text-sm sm:text-base text-[#E5C8A8] font-normal tracking-wide">
                     WhatsApp: (99) 99109-6952
                 </p>
@@ -697,13 +745,11 @@
                 </p>
             </div>
 
-            <!-- Botão Retangular ATENDIMENTO VIA WHATSAPP -->
-            <a id="footer-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn-gold px-10 sm:px-14 py-4 min-w-[280px] sm:min-w-[340px]">
+            <a id="footer-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn-gold px-8 sm:px-14 py-4 min-w-[260px] sm:min-w-[340px]">
                 <span id="footer-btn-text">ATENDIMENTO VIA WHATSAPP</span>
             </a>
         </div>
 
-        <!-- Barra Inferior com Link para o Instagram e Direitos Reservados -->
         <div class="border-t border-[#C6A37C]/15 py-6 px-4 text-center bg-[#040404] space-y-3">
             <div>
                 <a id="footer-instagram-link" href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2.5 text-[#C6A37C] hover:text-[#E5C8A8] transition group">
@@ -723,7 +769,7 @@
     </footer>
 
     <script id="app-logic">
-        const STORAGE_KEY = 'boutique_jg_marbelle_v7';
+        const STORAGE_KEY = 'boutique_jg_marbelle_v10';
 
         /*__DEFAULT_DATA_START__*/
         const defaultData = {
@@ -823,14 +869,28 @@
         let wishlist = JSON.parse(localStorage.getItem('jg_wishlist_v1')) || [];
         let showWishlistOnly = false;
 
-        // Estado do Modal e Carrossel de Produto
         let currentModalProduct = null;
         let currentModalImages = [];
         let currentCarouselIndex = 0;
         let selectedSize = '';
-
-        // Lista temporária de fotos no formulário do Admin
         let formProductImages = [];
+
+        // Funções de bloqueio de rolagem da página no fundo quando qualquer modal abre
+        function lockBodyScroll() {
+            document.documentElement.classList.add('modal-open');
+            document.body.classList.add('modal-open');
+        }
+
+        function unlockBodyScroll() {
+            const anyOpen = !document.getElementById('product-modal').classList.contains('hidden') ||
+                            !document.getElementById('fullscreen-zoom-modal').classList.contains('hidden') ||
+                            !document.getElementById('admin-login-modal').classList.contains('hidden') ||
+                            !document.getElementById('admin-modal').classList.contains('hidden');
+            if (!anyOpen) {
+                document.documentElement.classList.remove('modal-open');
+                document.body.classList.remove('modal-open');
+            }
+        }
 
         function saveState() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -839,7 +899,6 @@
             }
         }
 
-        // Formata o número do WhatsApp garantindo o código do país (55) para redirecionamento correto
         function formatWhatsAppNumber(raw) {
             let digits = String(raw || '').replace(/\D/g, '');
             if (!digits) digits = '5599991096952';
@@ -849,7 +908,6 @@
             return digits;
         }
 
-        // Helper para comprimir imagem via Canvas
         function compressImageFile(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -881,7 +939,6 @@
             });
         }
 
-        // Upload de Imagem para Ícone de Categoria
         async function handleCategoryImageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -889,7 +946,6 @@
             document.getElementById('cat-img-input').value = dataUrl;
         }
 
-        // Upload de Múltiplas Fotos para o Produto
         async function handleMultipleProductImagesUpload(event) {
             const files = Array.from(event.target.files || []);
             if (!files.length) return;
@@ -944,7 +1000,6 @@
             `).join('');
         }
 
-        // Renderizar Rodapé de Atendimento, Instagram e Direitos Reservados
         function renderFooter() {
             document.getElementById('footer-whatsapp-display').textContent = state.whatsappDisplay || 'WhatsApp: (99) 99109-6952';
             document.getElementById('footer-address').textContent = state.address || 'Parque Trizidela — São Domingos, MA';
@@ -959,11 +1014,10 @@
             const igLink = document.getElementById('footer-instagram-link');
             igLink.href = state.instagramUrl || 'https://instagram.com/';
 
-            // Se o modal de produto estiver aberto, atualiza também o link dele
             updateModalWhatsAppHref();
         }
 
-        // Renderizar Círculos de Categoria Compactos
+        // Renderizar Círculos de Categoria com largura padronizada para não colar textos
         function renderCategories() {
             const container = document.getElementById('categories-stories');
             const otherCats = [];
@@ -995,11 +1049,11 @@
                 const isActive = activeCategory.toLowerCase() === catName.toLowerCase();
 
                 return `
-                    <button onclick="filterByCategory('${catName.replace(/'/g, "\\'")}')" class="story-item ${isActive ? 'active' : ''} flex flex-col items-center group shrink-0 w-16 sm:w-20 focus:outline-none">
+                    <button onclick="filterByCategory('${catName.replace(/'/g, "\\'")}')" class="story-item ${isActive ? 'active' : ''} flex flex-col items-center group shrink-0 w-[68px] sm:w-20 px-1 focus:outline-none">
                         <div class="story-ring w-12 h-12 sm:w-14 sm:h-14 bg-[#121110] flex items-center justify-center overflow-hidden">
                             ${catName === 'Todos' ? `
                                 <div class="w-full h-full rounded-full bg-[#151310] flex items-center justify-center text-[#E5C8A8]">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <rect x="3" y="3" width="7" height="7" rx="1" stroke-width="1.8"></rect>
                                         <rect x="14" y="3" width="7" height="7" rx="1" stroke-width="1.8"></rect>
                                         <rect x="3" y="14" width="7" height="7" rx="1" stroke-width="1.8"></rect>
@@ -1010,7 +1064,7 @@
                                 <img src="${imgUrl}" alt="${catName}" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition duration-300">
                             `}
                         </div>
-                        <span class="mt-1.5 text-[9.5px] sm:text-[10px] tracking-[0.06em] uppercase text-center line-clamp-1 leading-tight ${isActive ? 'text-[#E5C8A8] font-semibold' : 'text-[#A39B93] group-hover:text-[#F5EFEA]'}">
+                        <span class="mt-1.5 text-[8px] sm:text-[10px] tracking-[0.03em] uppercase text-center truncate w-full leading-tight ${isActive ? 'text-[#E5C8A8] font-semibold' : 'text-[#A39B93] group-hover:text-[#F5EFEA]'}">
                             ${catName}
                         </span>
                     </button>
@@ -1022,14 +1076,13 @@
             document.getElementById('categories-stories').scrollBy({ left: offset, behavior: 'smooth' });
         }
 
-        // Helper para obter array de imagens de um produto
         function getProductImages(prod) {
             if (Array.isArray(prod.images) && prod.images.length > 0) return prod.images;
             if (prod.image) return [prod.image];
             return ['https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=700&q=80'];
         }
 
-        // Renderizar Grade 3x3
+        // Renderizar Grade 3x3 Perfeitamente Alinhada
         function renderProducts() {
             const grid = document.getElementById('products-grid');
             
@@ -1046,12 +1099,12 @@
             if (currentSort === 'price-desc') filtered.sort((a, b) => b.price - a.price);
             if (currentSort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name));
 
-            document.getElementById('current-category-label').textContent = showWishlistOnly ? 'Peças Favoritas' : activeCategory;
+            document.getElementById('current-category-label').textContent = showWishlistOnly ? 'Favoritos' : activeCategory;
             document.getElementById('products-count-badge').textContent = filtered.length;
 
             grid.className = viewMode === 'grid'
-                ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6'
-                : 'grid grid-cols-1 md:grid-cols-2 gap-4';
+                ? 'grid grid-cols-3 gap-2 sm:gap-5 lg:gap-6 items-stretch'
+                : 'grid grid-cols-2 gap-3 sm:gap-6 items-stretch';
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
@@ -1072,51 +1125,58 @@
 
                 const shouldShowSizes = prod.showSizes !== false && prod.sizes && prod.sizes.length > 0;
                 const sizesHtml = shouldShowSizes
-                    ? `<div class="flex flex-wrap items-center justify-center gap-1.5 pt-2.5 border-t border-[#C6A37C]/15">
+                    ? `<div class="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 pt-1.5 sm:pt-2.5 border-t border-[#C6A37C]/15 min-h-[24px] sm:min-h-[34px]">
                         ${prod.sizes.map(s => `<span class="size-pill">${s}</span>`).join('')}
                        </div>`
-                    : '';
+                    : `<div class="pt-1.5 sm:pt-2.5 border-t border-[#C6A37C]/10 min-h-[24px] sm:min-h-[34px] flex items-center justify-center">
+                        <span class="text-[7px] sm:text-[9px] uppercase tracking-widest text-[#6E665F]">Sob Consulta</span>
+                       </div>`;
+
                 const badgeIcon = prod.badge === 'Novo!' ? '✨ Novo!' : (prod.badge === 'De volta!' ? '↺ De volta!' : prod.badge);
 
                 return `
-                    <article onclick="openProductModal(${prod.id})" class="catalog-card p-3 flex flex-col justify-between cursor-pointer group relative">
-                        <div class="bg-[#121110] rounded-lg overflow-hidden border border-[#C6A37C]/15 relative mb-3">
-                            ${prod.badge ? `
-                                <span class="absolute top-2.5 left-2.5 z-20 px-2.5 py-1 rounded-md bg-[#1A2E26]/95 border border-[#C6A37C]/50 text-[10px] font-medium text-[#E5C8A8] shadow-md">
-                                    ${badgeIcon}
-                                </span>
-                            ` : ''}
-
-                            <button onclick="toggleWishlistItem(event, ${prod.id})" class="absolute top-2.5 right-2.5 z-20 w-8 h-8 rounded-full bg-[#060606]/80 border border-[#C6A37C]/35 flex items-center justify-center text-[#C6A37C] hover:scale-110 transition">
-                                <svg class="w-4 h-4" fill="${isFav ? '#C6A37C' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                </svg>
-                            </button>
-
-                            <div class="py-2.5 px-3 text-center bg-[#0B0A09] border-b border-[#C6A37C]/10">
-                                <span class="font-serif-jg text-sm sm:text-base tracking-[0.22em] uppercase text-[#E5C8A8] block leading-none">BOUTIQUE JG</span>
-                                <span class="text-[7px] tracking-[0.3em] uppercase text-[#A39B93]">${prod.category}</span>
+                    <article onclick="openProductModal(${prod.id})" class="catalog-card p-1.5 sm:p-3 flex flex-col justify-between cursor-pointer group relative">
+                        <div class="bg-[#121110] rounded-md sm:rounded-lg overflow-hidden border border-[#C6A37C]/15 mb-1.5 sm:mb-3">
+                            
+                            <!-- Faixa Superior da Marca (Limpa e Centralizada) -->
+                            <div class="py-1 sm:py-2 px-1 sm:px-3 text-center bg-[#0B0A09] border-b border-[#C6A37C]/10">
+                                <span class="font-serif-jg text-[8px] sm:text-base tracking-[0.12em] sm:tracking-[0.22em] uppercase text-[#E5C8A8] block leading-none truncate">BOUTIQUE JG</span>
+                                <span class="hidden sm:block text-[7px] tracking-[0.3em] uppercase text-[#A39B93] mt-0.5 truncate">${prod.category}</span>
                             </div>
 
+                            <!-- Quadro da Foto (Sem sobrepor o título acima) -->
                             <div class="aspect-[4/5] w-full overflow-hidden relative bg-[#090909]">
-                                <img src="${mainImg}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <img src="${mainImg}" alt="${prod.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                                 
-                                ${imgs.length > 1 ? `
-                                    <span class="absolute bottom-3 left-3 px-2 py-0.5 rounded bg-[#060606]/80 border border-[#C6A37C]/35 text-[9px] text-[#E5C8A8]">
-                                        📷 ${imgs.length} fotos
+                                ${prod.badge ? `
+                                    <span class="absolute top-1 left-1 sm:top-2.5 sm:left-2.5 z-20 px-1 py-0.5 sm:px-2.5 sm:py-1 rounded bg-[#1A2E26]/95 border border-[#C6A37C]/50 text-[6px] sm:text-[10px] font-medium text-[#E5C8A8] leading-none shadow">
+                                        ${badgeIcon}
                                     </span>
                                 ` : ''}
 
-                                <div class="absolute bottom-3 right-3 w-12 h-12 rounded-full border-2 border-[#E5C8A8]/80 overflow-hidden shadow-lg bg-[#060606]">
-                                    <img src="${thumbImg}" alt="" class="w-full h-full object-cover ${imgs.length === 1 ? 'scale-150' : ''}">
+                                <button onclick="toggleWishlistItem(event, ${prod.id})" class="absolute top-1 right-1 sm:top-2.5 sm:right-2.5 z-20 w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-[#060606]/80 border border-[#C6A37C]/35 flex items-center justify-center text-[#C6A37C] hover:scale-110 transition">
+                                    <svg class="w-2.5 h-2.5 sm:w-4 sm:h-4" fill="${isFav ? '#C6A37C' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </button>
+
+                                ${imgs.length > 1 ? `
+                                    <span class="absolute bottom-1 left-1 sm:bottom-3 sm:left-3 px-1 sm:px-2 py-0.5 rounded bg-[#060606]/85 border border-[#C6A37C]/35 text-[6px] sm:text-[9px] text-[#E5C8A8] leading-none">
+                                        📷 ${imgs.length}
+                                    </span>
+                                ` : ''}
+
+                                <div class="absolute bottom-1 right-1 sm:bottom-3 sm:right-3 w-5 h-5 sm:w-12 sm:h-12 rounded-full border sm:border-2 border-[#E5C8A8]/80 overflow-hidden shadow-md bg-[#060606]">
+                                    <img src="${thumbImg}" alt="" loading="lazy" class="w-full h-full object-cover ${imgs.length === 1 ? 'scale-150' : ''}">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="px-1 pt-1 flex flex-col justify-between flex-1">
-                            <div class="flex items-start justify-between gap-2 ${shouldShowSizes ? 'mb-3' : 'mb-1'}">
-                                <h3 class="text-xs sm:text-sm font-semibold uppercase tracking-wide text-[#F5EFEA] group-hover:text-[#E5C8A8] transition line-clamp-1">${prod.name}</h3>
-                                <span class="font-serif-jg text-base sm:text-lg text-[#E5C8A8] font-semibold shrink-0 leading-none">
+                        <!-- Rodapé do Card com altura uniforme para manter os 3 cards da linha 100% alinhados -->
+                        <div class="px-0.5 sm:px-1 flex flex-col justify-between flex-1 min-w-0">
+                            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-0.5 sm:gap-2 mb-1.5 sm:mb-2.5 min-w-0">
+                                <h3 class="text-[8.5px] sm:text-sm font-semibold uppercase tracking-tight sm:tracking-wide text-[#F5EFEA] group-hover:text-[#E5C8A8] transition truncate w-full">${prod.name}</h3>
+                                <span class="font-serif-jg text-[11px] sm:text-lg text-[#E5C8A8] font-semibold shrink-0 leading-none">
                                     ${prod.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                 </span>
                             </div>
@@ -1127,7 +1187,6 @@
             }).join('');
         }
 
-        // Filtros e Navegação
         function filterByCategory(cat) {
             activeCategory = cat;
             showWishlistOnly = false;
@@ -1176,12 +1235,18 @@
         }
 
         function updateWishlistBadge() {
-            const badge = document.getElementById('wishlist-count');
-            badge.textContent = wishlist.length;
-            badge.classList.toggle('hidden', wishlist.length === 0);
+            const badgeDesktop = document.getElementById('wishlist-count');
+            const badgeMobile = document.getElementById('wishlist-count-mobile');
+            if (badgeDesktop) {
+                badgeDesktop.textContent = wishlist.length;
+                badgeDesktop.classList.toggle('hidden', wishlist.length === 0);
+            }
+            if (badgeMobile) {
+                badgeMobile.textContent = wishlist.length;
+                badgeMobile.classList.toggle('hidden', wishlist.length === 0);
+            }
         }
 
-        // Atualiza o link direto do botão "Reservar Peça no WhatsApp" para o número cadastrado
         function updateModalWhatsAppHref() {
             const linkEl = document.getElementById('modal-whatsapp-link');
             if (!linkEl || !currentModalProduct) return;
@@ -1194,7 +1259,7 @@
             linkEl.href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
         }
 
-        // Modal de Produto com Carrossel de Fotos
+        // Abre Modal de Produto e trava a rolagem da página no fundo
         function openProductModal(id) {
             const prod = state.products.find(p => p.id === id);
             if (!prod) return;
@@ -1220,7 +1285,31 @@
 
             updateModalCarousel();
             updateModalWhatsAppHref();
-            document.getElementById('product-modal').classList.remove('hidden');
+
+            const modalEl = document.getElementById('product-modal');
+            modalEl.classList.remove('hidden');
+            const scrollBox = modalEl.querySelector('.modal-scroll-area');
+            if (scrollBox) scrollBox.scrollTop = 0;
+
+            lockBodyScroll();
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            unlockBodyScroll();
+        }
+
+        function openFullscreenZoom() {
+            const currentSrc = currentModalImages[currentCarouselIndex];
+            if (!currentSrc) return;
+            document.getElementById('fullscreen-zoom-img').src = currentSrc;
+            document.getElementById('fullscreen-zoom-modal').classList.remove('hidden');
+            lockBodyScroll();
+        }
+
+        function closeFullscreenZoom() {
+            document.getElementById('fullscreen-zoom-modal').classList.add('hidden');
+            unlockBodyScroll();
         }
 
         function updateModalCarousel() {
@@ -1272,18 +1361,16 @@
             updateModalWhatsAppHref();
         }
 
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.add('hidden');
-        }
-
         // Controle de Acesso Admin e Abas
         function openAdminModal() {
             document.getElementById('admin-login-modal').classList.remove('hidden');
+            lockBodyScroll();
         }
 
         function closeAdminLoginModal() {
             document.getElementById('admin-login-modal').classList.add('hidden');
             document.getElementById('admin-password-input').value = '';
+            unlockBodyScroll();
         }
 
         function handleAdminLogin(e) {
@@ -1292,8 +1379,9 @@
             const correctPwd = state.adminPassword || 'jg2026';
 
             if (pwd === correctPwd) {
-                closeAdminLoginModal();
-                // Carrega dados de Contato, Rodapé, Instagram e Direitos no Admin
+                document.getElementById('admin-login-modal').classList.add('hidden');
+                document.getElementById('admin-password-input').value = '';
+
                 document.getElementById('admin-whatsapp').value = state.whatsapp || '';
                 document.getElementById('admin-whatsapp-display').value = state.whatsappDisplay || '';
                 document.getElementById('admin-address').value = state.address || '';
@@ -1302,7 +1390,6 @@
                 document.getElementById('admin-instagram-url').value = state.instagramUrl || '';
                 document.getElementById('admin-copyright').value = state.copyrightText || '';
 
-                // Carrega configurações da Nuvem
                 document.getElementById('cloud-auto-sync').checked = state.cloud?.enabled !== false;
                 document.getElementById('cloud-db-url').value = state.cloud?.url || 'https://boutique-j-g-jennifer-garcia-default-rtdb.firebaseio.com/';
                 document.getElementById('cloud-api-key').value = state.cloud?.apiKey || '';
@@ -1312,6 +1399,7 @@
                 renderAdminProductsList();
                 renderFormImagesPreview();
                 document.getElementById('admin-modal').classList.remove('hidden');
+                lockBodyScroll();
             } else {
                 alert('Senha incorreta!');
             }
@@ -1319,6 +1407,7 @@
 
         function closeAdminModal() {
             document.getElementById('admin-modal').classList.add('hidden');
+            unlockBodyScroll();
         }
 
         function switchAdminTab(tab) {
@@ -1327,9 +1416,9 @@
                 document.getElementById(`admin-tab-${t}`).classList.toggle('hidden', t !== tab);
                 const btn = document.getElementById(`tab-btn-${t}`);
                 if (t === tab) {
-                    btn.className = 'px-4 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.18em] uppercase font-semibold border-b-2 border-[#C6A37C] text-[#E5C8A8] transition flex items-center gap-1.5';
+                    btn.className = 'px-3 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.16em] uppercase font-semibold border-b-2 border-[#C6A37C] text-[#E5C8A8] transition flex items-center gap-1.5';
                 } else {
-                    btn.className = 'px-4 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.18em] uppercase font-semibold border-b-2 border-transparent text-[#A39B93] hover:text-[#E5C8A8] transition flex items-center gap-1.5';
+                    btn.className = 'px-3 sm:px-5 py-2.5 text-[10px] sm:text-[11px] tracking-[0.16em] uppercase font-semibold border-b-2 border-transparent text-[#A39B93] hover:text-[#E5C8A8] transition flex items-center gap-1.5';
                 }
             });
         }
@@ -1360,7 +1449,6 @@
             alert('Senha administrativa alterada com sucesso!');
         }
 
-        // Controle de Tamanhos no Admin
         function toggleSizesInputState() {
             const checked = document.getElementById('prod-show-sizes').checked;
             const wrapper = document.getElementById('sizes-input-wrapper');
@@ -1449,7 +1537,7 @@
             document.getElementById('cat-form-title').textContent = 'Gerenciar Ícones das Categorias (Círculos)';
         }
 
-        // CRUD de Produtos (Com Múltiplas Fotos)
+        // CRUD de Produtos
         function renderAdminProductsList() {
             const list = document.getElementById('admin-products-list');
             list.innerHTML = state.products.map(p => {
@@ -1557,7 +1645,7 @@
             toggleSizesInputState();
         }
 
-        // Sincronização em Nuvem (Firebase / JSONBin) & Exportação HTML
+        // Sincronização em Nuvem & Exportação HTML
         function saveCloudSettings() {
             state.cloud = {
                 enabled: document.getElementById('cloud-auto-sync').checked,
@@ -1666,11 +1754,11 @@
             }
         }
 
-        // Exportar index.html atualizado garantindo que todos os modais estejam fechados no arquivo gerado
         function downloadUpdatedIndexHtml() {
             closeAdminModal();
             closeAdminLoginModal();
             closeProductModal();
+            closeFullscreenZoom();
 
             let fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
             const newDefaultBlock = `/*__DEFAULT_DATA_START__*/\n        const defaultData = ${JSON.stringify(state, null, 12)};\n        /*__DEFAULT_DATA_END__*/`;
@@ -1695,11 +1783,11 @@
             a.click();
         }
 
-        // Inicialização: garante que a página inicial abra limpa, com todos os modais ocultos
         document.addEventListener('DOMContentLoaded', () => {
             closeAdminModal();
             closeAdminLoginModal();
             closeProductModal();
+            closeFullscreenZoom();
 
             renderFooter();
             updateWishlistBadge();
