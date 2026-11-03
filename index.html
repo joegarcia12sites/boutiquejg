@@ -30,7 +30,11 @@
             --text-muted: #A39B93;
         }
 
-        .hidden {
+        /* Oculta estritamente apenas os modais quando possuírem a classe hidden */
+        #product-modal.hidden,
+        #fullscreen-zoom-modal.hidden,
+        #admin-login-modal.hidden,
+        #admin-modal.hidden {
             display: none !important;
         }
 
@@ -86,7 +90,7 @@
             font-family: 'Cormorant Garamond', Georgia, serif;
         }
 
-        /* Monograma JG 100% compatível com iOS Safari e Android */
+        /* Monograma JG 100% compatível com iOS Safari, Android e Desktop */
         .monogram-jg {
             font-family: 'Cormorant Garamond', Georgia, serif;
             font-weight: 400;
@@ -152,7 +156,7 @@
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85);
         }
 
-        /* Pílulas de Tamanho responsivas para caberem perfeitamente na grade 3x3 mobile */
+        /* Pílulas de Tamanho responsivas */
         .size-pill {
             min-width: 17px;
             height: 15px;
@@ -232,13 +236,13 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#C6A37C] selection:text-[#060606]">
 
-    <!-- CABEÇALHO PERFEITAMENTE ALINHADO NO MOBILE E DESKTOP -->
+    <!-- CABEÇALHO UNIFICADO E RESPONSIVO (MOBILE & DESKTOP) -->
     <header class="sticky top-0 z-40 bg-[#060606]/95 backdrop-blur-md border-b border-[#C6A37C]/20">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 sm:gap-4">
             
-            <!-- Linha 1 no Mobile: Placa de Logotipo à Esquerda + Favoritos e Cadeado Admin à Direita -->
+            <!-- Placa de Logotipo -->
             <div class="flex items-center justify-between w-full md:w-auto">
-                <a href="#" onclick="filterByCategory('Todos'); return false;" class="logo-plaque px-3 sm:px-5 py-1.5 sm:py-2 rounded-xl flex items-center gap-2.5 sm:gap-3 shrink-0 select-none group">
+                <a href="#" onclick="filterByCategory('Todos'); return false;" class="logo-plaque px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl flex items-center gap-2.5 sm:gap-3 shrink-0 select-none group">
                     <div class="monogram-jg text-xl sm:text-3xl">
                         <span class="letter-j">J</span><span class="letter-g">G</span>
                     </div>
@@ -247,28 +251,12 @@
                         <span class="text-[7px] sm:text-[9px] tracking-[0.26em] uppercase text-[#C6A37C] mt-1">Jennifer Garcia</span>
                     </div>
                 </a>
-
-                <!-- Botões Favoritos e Cadeado Admin visíveis ao lado da logo no mobile -->
-                <div class="flex md:hidden items-center gap-2">
-                    <button onclick="toggleWishlistOnly()" title="Filtrar Favoritos" class="relative p-2 bg-[#0D0D0D] border border-[#C6A37C]/35 rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                        <span id="wishlist-count-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#C6A37C] text-[#060606] text-[9px] font-bold flex items-center justify-center">0</span>
-                    </button>
-
-                    <!-- Somente Ícone de Cadeado (Mobile) -->
-                    <button onclick="openAdminModal()" aria-label="Painel Administrativo" title="Painel Administrativo" class="p-2 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <rect x="5" y="11" width="14" height="10" rx="2" stroke-width="1.6"></rect>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 11V7a4 4 0 018 0v4"></path>
-                        </svg>
-                    </button>
-                </div>
             </div>
 
-            <!-- Linha 2 no Mobile / Direita no Desktop: Busca Completa + Alternador de Grade + Ações Desktop -->
-            <div class="flex items-center gap-2 sm:gap-3 w-full md:flex-1 md:justify-end">
+            <!-- Barra Unificada: Busca + Alternador de Grade + Coração (Favoritos) + Cadeado (Admin) -->
+            <div class="flex items-center gap-2 sm:gap-2.5 w-full md:flex-1 md:justify-end">
+                
+                <!-- Input de Busca -->
                 <div class="relative flex-1 md:max-w-md min-w-0">
                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C6A37C] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"></path>
@@ -277,13 +265,13 @@
                         type="text" 
                         id="search-input" 
                         oninput="handleSearchInput(this.value)" 
-                        placeholder="Buscar produtos ou categorias..." 
+                        placeholder="Buscar produtos..." 
                         class="w-full bg-[#0D0D0D] border border-[#C6A37C]/35 focus:border-[#E5C8A8] rounded-full pl-9 sm:pl-10 pr-8 py-2 text-xs sm:text-sm text-[#F5EFEA] placeholder-[#A39B93] focus:outline-none transition shadow-inner"
                     >
                     <button id="btn-clear-search" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-[#A39B93] hover:text-[#E5C8A8] text-xs">✕</button>
                 </div>
 
-                <!-- Visualização de Grade (3x3 vs 2x2) -->
+                <!-- Alternador de Grade (3x3 vs 2x2) -->
                 <div class="flex items-center bg-[#0D0D0D] border border-[#C6A37C]/35 rounded-xl p-0.5 sm:p-1 shrink-0">
                     <button id="btn-view-grid" onclick="setGridView('grid')" title="Grade 3x3 Compacta" class="p-1.5 sm:p-2 rounded-lg bg-[#C6A37C]/25 text-[#E5C8A8] transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -308,16 +296,16 @@
                     </button>
                 </div>
 
-                <!-- Botões Favoritos e Cadeado Admin no Desktop -->
-                <button onclick="toggleWishlistOnly()" id="btn-wishlist-filter" title="Filtrar Favoritos" class="hidden md:flex relative p-2.5 bg-[#0D0D0D] border border-[#C6A37C]/35 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition shrink-0">
+                <!-- Botão Favoritos (Coração) — Sempre visível no Mobile e Desktop -->
+                <button onclick="toggleWishlistOnly()" id="btn-wishlist-filter" title="Filtrar Favoritos" class="flex items-center justify-center relative p-2 sm:p-2.5 bg-[#0D0D0D] border border-[#C6A37C]/35 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                     </svg>
                     <span id="wishlist-count" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#C6A37C] text-[#060606] text-[9px] font-bold flex items-center justify-center">0</span>
                 </button>
 
-                <!-- Somente Ícone de Cadeado (Desktop) -->
-                <button onclick="openAdminModal()" aria-label="Painel Administrativo" title="Painel Administrativo" class="hidden md:flex p-2.5 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition shrink-0">
+                <!-- Botão Cadeado (Painel Admin) — Sempre visível no Mobile e Desktop -->
+                <button onclick="openAdminModal()" aria-label="Painel Administrativo" title="Painel Administrativo" class="flex items-center justify-center p-2 sm:p-2.5 bg-[#0D0D0D] border border-[#C6A37C]/40 hover:border-[#E5C8A8] rounded-xl text-[#A39B93] hover:text-[#E5C8A8] transition shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <rect x="5" y="11" width="14" height="10" rx="2" stroke-width="1.6"></rect>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 11V7a4 4 0 018 0v4"></path>
@@ -777,7 +765,7 @@
     </footer>
 
     <script id="app-logic">
-        const STORAGE_KEY = 'boutique_jg_marbelle_v10';
+        const STORAGE_KEY = 'boutique_jg_marbelle_v11';
 
         /*__DEFAULT_DATA_START__*/
         const defaultData = {
@@ -883,7 +871,6 @@
         let selectedSize = '';
         let formProductImages = [];
 
-        // Funções de bloqueio de rolagem da página no fundo quando qualquer modal abre
         function lockBodyScroll() {
             document.documentElement.classList.add('modal-open');
             document.body.classList.add('modal-open');
@@ -1025,7 +1012,6 @@
             updateModalWhatsAppHref();
         }
 
-        // Renderizar Círculos de Categoria com largura padronizada
         function renderCategories() {
             const container = document.getElementById('categories-stories');
             const otherCats = [];
@@ -1090,7 +1076,6 @@
             return ['https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=700&q=80'];
         }
 
-        // Renderizar Grade 3x3 Perfeitamente Alinhada
         function renderProducts() {
             const grid = document.getElementById('products-grid');
             
@@ -1146,13 +1131,11 @@
                     <article onclick="openProductModal(${prod.id})" class="catalog-card p-1.5 sm:p-3 flex flex-col justify-between cursor-pointer group relative">
                         <div class="bg-[#121110] rounded-md sm:rounded-lg overflow-hidden border border-[#C6A37C]/15 mb-1.5 sm:mb-3">
                             
-                            <!-- Faixa Superior da Marca (Limpa e Centralizada) -->
                             <div class="py-1 sm:py-2 px-1 sm:px-3 text-center bg-[#0B0A09] border-b border-[#C6A37C]/10">
                                 <span class="font-serif-jg text-[8px] sm:text-base tracking-[0.12em] sm:tracking-[0.22em] uppercase text-[#E5C8A8] block leading-none truncate">BOUTIQUE JG</span>
                                 <span class="hidden sm:block text-[7px] tracking-[0.3em] uppercase text-[#A39B93] mt-0.5 truncate">${prod.category}</span>
                             </div>
 
-                            <!-- Quadro da Foto -->
                             <div class="aspect-[4/5] w-full overflow-hidden relative bg-[#090909]">
                                 <img src="${mainImg}" alt="${prod.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                                 
@@ -1180,7 +1163,6 @@
                             </div>
                         </div>
 
-                        <!-- Rodapé do Card -->
                         <div class="px-0.5 sm:px-1 flex flex-col justify-between flex-1 min-w-0">
                             <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-0.5 sm:gap-2 mb-1.5 sm:mb-2.5 min-w-0">
                                 <h3 class="text-[8.5px] sm:text-sm font-semibold uppercase tracking-tight sm:tracking-wide text-[#F5EFEA] group-hover:text-[#E5C8A8] transition truncate w-full">${prod.name}</h3>
@@ -1243,15 +1225,10 @@
         }
 
         function updateWishlistBadge() {
-            const badgeDesktop = document.getElementById('wishlist-count');
-            const badgeMobile = document.getElementById('wishlist-count-mobile');
-            if (badgeDesktop) {
-                badgeDesktop.textContent = wishlist.length;
-                badgeDesktop.classList.toggle('hidden', wishlist.length === 0);
-            }
-            if (badgeMobile) {
-                badgeMobile.textContent = wishlist.length;
-                badgeMobile.classList.toggle('hidden', wishlist.length === 0);
+            const badge = document.getElementById('wishlist-count');
+            if (badge) {
+                badge.textContent = wishlist.length;
+                badge.classList.toggle('hidden', wishlist.length === 0);
             }
         }
 
