@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Meta Tags Anti-Cache para Navegadores Mobile e WebViews (WhatsApp/Instagram) -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>BOUTIQUE JG | Jennifer Garcia — Catálogo Digital</title>
     <meta name="description" content="BOUTIQUE JG por Jennifer Garcia. Alta moda feminina, vestidos de seda, alfaiataria imperial e acessórios exclusivos em preto e dourado.">
     <meta name="theme-color" content="#060606">
@@ -217,6 +222,10 @@
         .btn-gold-solid:hover {
             filter: brightness(1.08);
             transform: translateY(-1px);
+        }
+        .btn-gold-solid:disabled {
+            opacity: 0.5;
+            cursor: wait;
         }
 
         .input-luxury {
@@ -437,7 +446,7 @@
         </div>
     </div>
 
-    <!-- PAINEL ADMINISTRATIVO COMPLETO COM ABAS -->
+    <!-- PAINEL ADMINISTRATIVO COMPLETO COM ABAS (SEM CACHE LOCAL, DIRETO NA NUVEM) -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden flex items-center justify-center p-2.5 sm:p-6">
         <div class="bg-[#0B0B0B] border border-[#C6A37C]/50 rounded-2xl max-w-5xl w-full max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
             
@@ -445,9 +454,9 @@
                 <div>
                     <div class="flex items-center gap-2.5">
                         <h2 class="font-serif-jg text-xl sm:text-2xl text-[#E5C8A8]">Painel Administrativo — Boutique JG</h2>
-                        <span id="admin-header-sync-badge" class="px-2 py-0.5 text-[9px] uppercase tracking-wider rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300">☁ Nuvem Pronta</span>
+                        <span id="admin-header-sync-badge" class="px-2 py-0.5 text-[9px] uppercase tracking-wider rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300">☁ Nuvem Direta Ativa</span>
                     </div>
-                    <p class="text-[10px] sm:text-[11px] text-[#A39B93]">Toda alteração feita aqui é enviada imediatamente em tempo real para todos os clientes.</p>
+                    <p class="text-[10px] sm:text-[11px] text-[#A39B93]">Zero cache local: todas as edições são gravadas diretamente no servidor para todos os clientes.</p>
                 </div>
                 <button onclick="closeAdminModal()" class="px-3 py-1.5 border border-[#C6A37C]/40 rounded-lg text-xs text-[#E5C8A8] hover:bg-[#C6A37C] hover:text-[#060606] transition shrink-0">Fechar ✕</button>
             </div>
@@ -495,7 +504,7 @@
                                 </div>
                             </div>
                             <div class="sm:col-span-3">
-                                <button type="submit" class="btn-gold-solid w-full py-2.5 rounded-lg text-xs">Salvar Ícone</button>
+                                <button type="submit" id="btn-save-category" class="btn-gold-solid w-full py-2.5 rounded-lg text-xs">Salvar Ícone na Nuvem</button>
                             </div>
                         </form>
 
@@ -585,11 +594,13 @@
                             <textarea id="prod-desc" rows="2" class="input-luxury" placeholder="Detalhes da peça..."></textarea>
                         </div>
 
-                        <button type="submit" class="btn-gold-solid px-6 py-3 rounded-lg w-full sm:w-auto">Salvar Produto & Publicar para Clientes</button>
+                        <button type="submit" id="btn-save-product" class="btn-gold-solid px-6 py-3 rounded-lg w-full sm:w-auto">
+                            ☁ Salvar Produto & Publicar para Clientes
+                        </button>
                     </form>
 
                     <div>
-                        <h3 class="text-xs tracking-[0.22em] uppercase text-[#C6A37C] mb-3">Peças no Catálogo</h3>
+                        <h3 class="text-xs tracking-[0.22em] uppercase text-[#C6A37C] mb-3">Peças Ativas na Nuvem</h3>
                         <div id="admin-products-list" class="space-y-2"></div>
                     </div>
                 </div>
@@ -701,7 +712,7 @@
                         </div>
 
                         <button type="button" onclick="saveContactAndFooterConfig()" class="btn-gold-solid px-6 py-3 rounded-lg text-xs">
-                            Salvar Informações de Atendimento & Rodapé
+                            ☁ Salvar Informações de Atendimento na Nuvem
                         </button>
                     </div>
 
@@ -712,7 +723,7 @@
                             <label class="block text-[10px] tracking-wider uppercase text-[#C6A37C] mb-1">Nova Senha</label>
                             <input type="password" id="admin-new-password" class="input-luxury" placeholder="Digite a nova senha">
                         </div>
-                        <button type="button" onclick="saveNewPassword()" class="btn-gold-solid w-full py-2.5 rounded-lg text-xs">Atualizar Senha</button>
+                        <button type="button" onclick="saveNewPassword()" class="btn-gold-solid w-full py-2.5 rounded-lg text-xs">☁ Atualizar Senha na Nuvem</button>
                     </div>
 
                 </div>
@@ -767,8 +778,23 @@
     </footer>
 
     <script id="app-logic">
-        const STORAGE_KEY = 'boutique_jg_marbelle_v14';
         const DEFAULT_FIREBASE_URL = 'https://boutique-j-g-jennifer-garcia-default-rtdb.firebaseio.com/';
+        const CLOUD_CONFIG_KEY = 'jg_cloud_connection_cfg';
+
+        // Remove todos os caches locais de catálogo antigos para impedir que o navegador do Admin ou do Cliente exiba dados em cache
+        function purgeAllLegacyCaches() {
+            try {
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (k && k.startsWith('boutique_jg_')) {
+                        keysToRemove.push(k);
+                    }
+                }
+                keysToRemove.forEach(k => localStorage.removeItem(k));
+            } catch (e) {}
+        }
+        purgeAllLegacyCaches();
 
         /*__DEFAULT_DATA_START__*/
         const defaultData = {
@@ -837,43 +863,17 @@
         };
         /*__DEFAULT_DATA_END__*/
 
-        function loadInitialLocalState() {
-            const keysToTry = [
-                STORAGE_KEY,
-                'boutique_jg_marbelle_v13',
-                'boutique_jg_marbelle_v12',
-                'boutique_jg_marbelle_v11',
-                'boutique_jg_marbelle_v10'
-            ];
-            for (const k of keysToTry) {
-                const raw = localStorage.getItem(k);
-                if (raw) {
-                    try {
-                        const parsed = JSON.parse(raw);
-                        if (parsed && Array.isArray(parsed.products)) return parsed;
-                    } catch (e) {}
-                }
+        // O estado em memória parte do código-fonte e é imediatamente atualizado pela Nuvem (sem depender de localStorage de catálogo)
+        let state = JSON.parse(JSON.stringify(defaultData));
+        try {
+            const savedCloudCfg = JSON.parse(localStorage.getItem(CLOUD_CONFIG_KEY));
+            if (savedCloudCfg && savedCloudCfg.url) {
+                state.cloud = savedCloudCfg;
             }
-            return JSON.parse(JSON.stringify(defaultData));
-        }
+        } catch (e) {}
 
-        let state = loadInitialLocalState();
-        if (!state.adminPassword) state.adminPassword = 'jg2026';
-        if (!state.whatsapp) state.whatsapp = '5599991096952';
-        if (!state.whatsappDisplay) state.whatsappDisplay = 'WhatsApp: (99) 99109-6952';
-        if (!state.address) state.address = 'Parque Trizidela — São Domingos, MA';
-        if (!state.hours) state.hours = 'Seg a Sáb — 10h às 20h';
-        if (!state.whatsappBtnText) state.whatsappBtnText = 'ATENDIMENTO VIA WHATSAPP';
-        if (!state.instagramUrl) state.instagramUrl = 'https://instagram.com/';
-        if (!state.copyrightText) state.copyrightText = '© 2026 BOUTIQUE JG — JENNIFER GARCIA. TODOS OS DIREITOS RESERVADOS.';
         if (!state.cloud || !state.cloud.url) {
-            state.cloud = {
-                enabled: true,
-                url: DEFAULT_FIREBASE_URL,
-                apiKey: ''
-            };
-        } else {
-            state.cloud.enabled = true;
+            state.cloud = { enabled: true, url: DEFAULT_FIREBASE_URL, apiKey: '' };
         }
         state.categories = (state.categories || []).filter(c => c && c.name && c.name.toLowerCase() !== 'todos');
 
@@ -906,13 +906,11 @@
             }
         }
 
-        // Salva no navegador e publica imediatamente na nuvem para todos os clientes
+        // Grava diretamente na Nuvem (Fonte Única da Verdade para Admin e Clientes)
         async function saveState() {
             state.updatedAt = new Date().toISOString();
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-            if (state.cloud && state.cloud.enabled !== false) {
-                await pushToCloud(false);
-            }
+            purgeAllLegacyCaches();
+            return await pushToCloud(false);
         }
 
         function formatWhatsAppNumber(raw) {
@@ -924,7 +922,7 @@
             return digits;
         }
 
-        // Compressão leve (650px @ 0.74) para garantir upload instantâneo no Firebase sem erro de tamanho
+        // Compressão otimizada (620px @ 0.72) para envio rápido de múltiplas fotos ao Firebase
         function compressImageFile(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -932,7 +930,7 @@
                     const img = new Image();
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
-                        const maxDim = 650;
+                        const maxDim = 620;
                         let w = img.width;
                         let h = img.height;
 
@@ -948,7 +946,7 @@
                         canvas.height = h;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, w, h);
-                        resolve(canvas.toDataURL('image/jpeg', 0.74));
+                        resolve(canvas.toDataURL('image/jpeg', 0.72));
                     };
                     img.src = e.target.result;
                 };
@@ -1368,7 +1366,7 @@
             updateModalWhatsAppHref();
         }
 
-        // Controle de Acesso Admin e Abas
+        // Controle de Acesso Admin e Abas (Sempre busca a última versão da nuvem ao abrir para evitar conflito de cache entre administradores)
         function openAdminModal() {
             document.getElementById('admin-login-modal').classList.remove('hidden');
             lockBodyScroll();
@@ -1380,9 +1378,11 @@
             unlockBodyScroll();
         }
 
-        function handleAdminLogin(e) {
+        async function handleAdminLogin(e) {
             e.preventDefault();
             const pwd = document.getElementById('admin-password-input').value;
+            // Sincroniza da nuvem antes de validar para garantir que a senha e os produtos estejam atualizados
+            await pullFromCloud(false);
             const correctPwd = state.adminPassword || 'jg2026';
 
             if (pwd === correctPwd) {
@@ -1431,6 +1431,7 @@
         }
 
         async function saveContactAndFooterConfig() {
+            await pullFromCloud(false);
             state.whatsapp = formatWhatsAppNumber(document.getElementById('admin-whatsapp').value);
             document.getElementById('admin-whatsapp').value = state.whatsapp;
             state.whatsappDisplay = document.getElementById('admin-whatsapp-display').value.trim();
@@ -1439,9 +1440,9 @@
             state.whatsappBtnText = document.getElementById('admin-btn-text').value.trim();
             state.instagramUrl = document.getElementById('admin-instagram-url').value.trim();
             state.copyrightText = document.getElementById('admin-copyright').value.trim();
-            await saveState();
+            const ok = await saveState();
             renderFooter();
-            alert('Informações salvas e publicadas para todos os clientes!');
+            if (ok) alert('☁ Informações salvas na nuvem para todos os clientes!');
         }
 
         async function saveNewPassword() {
@@ -1450,10 +1451,11 @@
                 alert('A senha deve ter pelo menos 4 caracteres.');
                 return;
             }
+            await pullFromCloud(false);
             state.adminPassword = newPwd;
-            await saveState();
+            const ok = await saveState();
             document.getElementById('admin-new-password').value = '';
-            alert('Senha administrativa alterada com sucesso!');
+            if (ok) alert('☁ Senha administrativa atualizada na nuvem com sucesso!');
         }
 
         function toggleSizesInputState() {
@@ -1469,7 +1471,7 @@
             document.getElementById('prod-sizes').value = preset;
         }
 
-        // CRUD de Categorias
+        // CRUD de Categorias (Sem cache local — sincronizado direto com a nuvem)
         function renderAdminCategoriesList() {
             const list = document.getElementById('admin-categories-list');
             list.innerHTML = (state.categories || []).map((cat, idx) => `
@@ -1488,6 +1490,7 @@
 
         async function saveCategory(e) {
             e.preventDefault();
+            const btn = document.getElementById('btn-save-category');
             const editIdx = document.getElementById('cat-edit-index').value;
             const nameVal = document.getElementById('cat-name-input').value.trim();
             const imgVal = document.getElementById('cat-img-input').value.trim();
@@ -1497,9 +1500,14 @@
                 return;
             }
 
+            btn.disabled = true;
+            btn.textContent = 'Sincronizando...';
+
+            await pullFromCloud(false);
+
             if (editIdx !== '') {
                 const idx = Number(editIdx);
-                const oldName = state.categories[idx].name;
+                const oldName = state.categories[idx] ? state.categories[idx].name : nameVal;
                 state.categories[idx] = { name: nameVal, img: imgVal };
                 state.products.forEach(p => {
                     if ((p.category || '').toLowerCase() === oldName.toLowerCase()) p.category = nameVal;
@@ -1510,6 +1518,9 @@
             }
 
             await saveState();
+            btn.disabled = false;
+            btn.textContent = 'Salvar Ícone na Nuvem';
+
             resetCategoryForm();
             renderAdminCategoriesList();
             renderAdminProductsList();
@@ -1529,7 +1540,8 @@
         async function deleteCategory(idx) {
             const cat = state.categories[idx];
             if (!cat) return;
-            if (!confirm(`Deseja remover o ícone da categoria "${cat.name}"?`)) return;
+            if (!confirm(`Deseja remover o ícone da categoria "${cat.name}" para todos os clientes?`)) return;
+            await pullFromCloud(false);
             state.categories.splice(idx, 1);
             if (activeCategory.toLowerCase() === cat.name.toLowerCase()) activeCategory = 'Todos';
             await saveState();
@@ -1544,7 +1556,7 @@
             document.getElementById('cat-form-title').textContent = 'Gerenciar Ícones das Categorias (Círculos)';
         }
 
-        // CRUD de Produtos
+        // CRUD de Produtos (Sem cache local — sincronizado direto com a nuvem)
         function renderAdminProductsList() {
             const list = document.getElementById('admin-products-list');
             list.innerHTML = (state.products || []).map(p => {
@@ -1581,42 +1593,63 @@
                 return;
             }
 
+            const btn = document.getElementById('btn-save-product');
+            btn.disabled = true;
+            btn.textContent = '☁ Publicando na Nuvem...';
+
             const idVal = document.getElementById('prod-id').value;
+            const nameVal = document.getElementById('prod-name').value.trim();
+            const catVal = document.getElementById('prod-category').value.trim();
+            const priceVal = parseFloat(document.getElementById('prod-price').value) || 0;
+            const badgeVal = document.getElementById('prod-badge').value;
             const showSizes = document.getElementById('prod-show-sizes').checked;
             const sizesArr = document.getElementById('prod-sizes').value.split(',').map(s => s.trim()).filter(Boolean);
-            const catVal = document.getElementById('prod-category').value.trim();
+            const descVal = document.getElementById('prod-desc').value.trim();
+            const imagesCopy = [...formProductImages];
+
+            // Busca o estado mais recente da nuvem antes de inserir/atualizar a peça para evitar conflito de cache entre administradores
+            await pullFromCloud(false);
 
             const prodObj = {
                 id: idVal ? Number(idVal) : Date.now(),
-                name: document.getElementById('prod-name').value.trim(),
+                name: nameVal,
                 category: catVal,
-                price: parseFloat(document.getElementById('prod-price').value) || 0,
-                badge: document.getElementById('prod-badge').value,
-                image: formProductImages[0],
-                images: [...formProductImages],
+                price: priceVal,
+                badge: badgeVal,
+                image: imagesCopy[0],
+                images: imagesCopy,
                 showSizes: showSizes,
                 sizes: showSizes ? (sizesArr.length ? sizesArr : ['UN']) : [],
-                desc: document.getElementById('prod-desc').value.trim()
+                desc: descVal
             };
 
             const catExists = (state.categories || []).some(c => c.name.toLowerCase() === catVal.toLowerCase());
             if (!catExists && catVal.toLowerCase() !== 'todos') {
-                state.categories.push({ name: catVal, img: formProductImages[0] });
+                state.categories.push({ name: catVal, img: imagesCopy[0] });
             }
 
             if (idVal) {
                 const idx = state.products.findIndex(p => p.id === Number(idVal));
-                if (idx > -1) state.products[idx] = prodObj;
+                if (idx > -1) {
+                    state.products[idx] = prodObj;
+                } else {
+                    state.products.unshift(prodObj);
+                }
             } else {
                 state.products.unshift(prodObj);
             }
 
-            await saveState();
-            resetProductForm();
-            renderAdminCategoriesList();
-            renderAdminProductsList();
-            renderCategories();
-            renderProducts();
+            const ok = await saveState();
+            btn.disabled = false;
+            btn.textContent = '☁ Salvar Produto & Publicar para Clientes';
+
+            if (ok) {
+                resetProductForm();
+                renderAdminCategoriesList();
+                renderAdminProductsList();
+                renderCategories();
+                renderProducts();
+            }
         }
 
         function editProduct(id) {
@@ -1639,7 +1672,8 @@
         }
 
         async function deleteProduct(id) {
-            if (!confirm('Deseja remover esta peça do catálogo?')) return;
+            if (!confirm('Deseja remover esta peça do catálogo de todos os clientes?')) return;
+            await pullFromCloud(false);
             state.products = state.products.filter(p => p.id !== id);
             await saveState();
             renderAdminProductsList();
@@ -1660,7 +1694,7 @@
         }
 
         // =========================================================================
-        // SINCRONIZAÇÃO EM TEMPO REAL COM FIREBASE / JSONBIN (PARA TODOS OS CLIENTES)
+        // MOTOR DE SINCRONIZAÇÃO EM NUVEM (SEM CACHE LOCAL DE PRODUTOS)
         // =========================================================================
         function saveCloudSettingsFromInputs() {
             const autoEl = document.getElementById('cloud-auto-sync');
@@ -1672,7 +1706,7 @@
                     url: urlEl.value.trim() || DEFAULT_FIREBASE_URL,
                     apiKey: keyEl.value.trim()
                 };
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                localStorage.setItem(CLOUD_CONFIG_KEY, JSON.stringify(state.cloud));
                 updateCloudStatusUI();
             }
         }
@@ -1696,7 +1730,7 @@
                 if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block';
                 if (txt) txt.textContent = 'Nuvem Ativa';
                 if (badge) {
-                    badge.textContent = '☁ Sincronizado para Clientes';
+                    badge.textContent = '☁ Nuvem Sincronizada (Zero Cache)';
                     badge.className = 'px-2 py-0.5 text-[9px] uppercase tracking-wider rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300';
                 }
             } else {
@@ -1713,7 +1747,7 @@
                 if (!clean.endsWith('.json')) clean += '/catalog_jg.json';
                 const params = [];
                 if (apiKey) params.push(`auth=${encodeURIComponent(apiKey)}`);
-                if (addCacheBuster) params.push(`t=${Date.now()}`);
+                if (addCacheBuster) params.push(`cb=${Date.now()}_${Math.random().toString(36).substring(2, 7)}`);
                 if (params.length > 0) clean += `?${params.join('&')}`;
             }
             return clean;
@@ -1724,8 +1758,11 @@
             const targetKey = (state.cloud && state.cloud.apiKey) ? state.cloud.apiKey : '';
 
             try {
-                const endpoint = formatFirebaseEndpoint(targetUrl, targetKey, false);
-                const headers = { 'Content-Type': 'application/json' };
+                const endpoint = formatFirebaseEndpoint(targetUrl, targetKey, true);
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache, no-store, must-revalidate'
+                };
                 if (targetKey && !endpoint.includes('firebase')) {
                     headers['X-Master-Key'] = targetKey;
                 }
@@ -1738,6 +1775,7 @@
                     whatsappBtnText: state.whatsappBtnText,
                     instagramUrl: state.instagramUrl,
                     copyrightText: state.copyrightText,
+                    adminPassword: state.adminPassword || 'jg2026',
                     categories: state.categories || [],
                     products: state.products || [],
                     updatedAt: new Date().toISOString()
@@ -1746,6 +1784,7 @@
                 const res = await fetch(endpoint, {
                     method: 'PUT',
                     headers,
+                    cache: 'no-store',
                     body: JSON.stringify(payloadToSave)
                 });
 
@@ -1755,18 +1794,19 @@
 
                 updateCloudStatusUI('ok');
                 if (showNotification) {
-                    alert('☁ Sincronizado com sucesso! Todos os clientes já visualizam o catálogo atualizado em tempo real.');
+                    alert('☁ Publicado na nuvem com sucesso! Todos os clientes já visualizam o catálogo atualizado.');
                 }
                 return true;
             } catch (err) {
                 updateCloudStatusUI('error');
-                alert('⚠ ATENÇÃO: O banco de dados Firebase recusou a gravação (' + err.message + ').\n\nPor isso a alteração só ficou salva no navegador de quem editou e não foi para os clientes!\n\nPara liberar: Entre no console.firebase.google.com -> Realtime Database -> Regras (Rules) e deixe:\n{\n  "rules": {\n    ".read": true,\n    ".write": true\n  }\n}');
+                alert('⚠ ERRO AO PUBLICAR NA NUVEM (' + err.message + ').\n\nVerifique se as Regras (Rules) do seu Firebase Realtime Database estão abertas:\n{\n  "rules": {\n    ".read": true,\n    ".write": true\n  }\n}');
                 return false;
             }
         }
 
         function applyCloudPayload(payload) {
-            if (!payload || (!Array.isArray(payload.products) && !Array.isArray(payload.categories))) return false;
+            if (!payload || typeof payload !== 'object') return false;
+            if (!Array.isArray(payload.products) && !Array.isArray(payload.categories) && !payload.whatsapp) return false;
 
             if (payload.whatsapp) state.whatsapp = formatWhatsAppNumber(payload.whatsapp);
             if (payload.whatsappDisplay) state.whatsappDisplay = payload.whatsappDisplay;
@@ -1775,18 +1815,17 @@
             if (payload.whatsappBtnText) state.whatsappBtnText = payload.whatsappBtnText;
             if (payload.instagramUrl) state.instagramUrl = payload.instagramUrl;
             if (payload.copyrightText) state.copyrightText = payload.copyrightText;
+            if (payload.adminPassword) state.adminPassword = payload.adminPassword;
 
-            if (Array.isArray(payload.categories)) {
-                state.categories = payload.categories.filter(c => c && c.name && c.name.toLowerCase() !== 'todos');
-            }
-            if (Array.isArray(payload.products)) {
-                state.products = payload.products;
-            }
+            state.categories = Array.isArray(payload.categories)
+                ? payload.categories.filter(c => c && c.name && c.name.toLowerCase() !== 'todos')
+                : [];
+            state.products = Array.isArray(payload.products) ? payload.products : [];
+
             if (payload.updatedAt) {
                 state.updatedAt = payload.updatedAt;
             }
 
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
             renderFooter();
             renderCategories();
             renderProducts();
@@ -1805,7 +1844,10 @@
 
             try {
                 const endpoint = formatFirebaseEndpoint(cloudUrl, apiKey, true);
-                const headers = {};
+                const headers = {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache'
+                };
                 if (apiKey && !endpoint.includes('firebase')) {
                     headers['X-Master-Key'] = apiKey;
                 }
@@ -1821,16 +1863,19 @@
                 const payload = data ? (data.record || data.catalog_jg || data) : null;
 
                 if (applyCloudPayload(payload)) {
-                    if (showNotification) alert('🔄 Dados sincronizados da nuvem com sucesso!');
+                    if (showNotification) alert('🔄 Catálogo atualizado direto da nuvem!');
+                    return true;
                 } else if (showNotification) {
-                    alert('A nuvem ainda está vazia. Clique em "☁ SALVAR & SINCRONIZAR" para enviar seus produtos atuais.');
+                    alert('A nuvem ainda está vazia. Clique em "☁ SALVAR & SINCRONIZAR" para inicializar o banco.');
                 }
+                return false;
             } catch (err) {
-                if (showNotification) alert('Erro ao carregar dados da nuvem: ' + err.message);
+                if (showNotification) alert('Erro ao buscar dados da nuvem: ' + err.message);
+                return false;
             }
         }
 
-        // Listener Instantâneo via Server-Sent Events (SSE) nativo do Firebase Realtime Database
+        // Listener em Tempo Real via Server-Sent Events (SSE) do Firebase
         function startRealtimeFirebaseStream() {
             const cloudUrl = (state.cloud && state.cloud.url) ? state.cloud.url : DEFAULT_FIREBASE_URL;
             const apiKey = (state.cloud && state.cloud.apiKey) ? state.cloud.apiKey : '';
@@ -1842,7 +1887,7 @@
                 evtSource.addEventListener('put', (e) => {
                     try {
                         const parsed = JSON.parse(e.data);
-                        if (parsed && parsed.data && document.getElementById('admin-modal').classList.contains('hidden')) {
+                        if (parsed && parsed.data) {
                             applyCloudPayload(parsed.data);
                         }
                     } catch (err) {}
@@ -1867,9 +1912,20 @@
             a.click();
         }
 
+        // Gera vercel.json já configurado com cabeçalhos HTTP anti-cache para que a Vercel nunca guarde cache antigo para os clientes
         function downloadVercelJson() {
             const vercelConfig = {
                 version: 2,
+                headers: [
+                    {
+                        source: "/(.*)",
+                        headers: [
+                            { key: "Cache-Control", value: "no-store, no-cache, must-revalidate, proxy-revalidate" },
+                            { key: "Pragma", value: "no-cache" },
+                            { key: "Expires", value: "0" }
+                        ]
+                    }
+                ],
                 rewrites: [{ source: "/(.*)", destination: "/index.html" }]
             };
             const blob = new Blob([JSON.stringify(vercelConfig, null, 2)], { type: 'application/json' });
@@ -1891,18 +1947,24 @@
             renderProducts();
             renderFormImagesPreview();
 
-            // 1. Busca imediatamente os dados mais recentes da nuvem assim que qualquer cliente abre o site
+            // 1. Busca obrigatoriamente a versão da nuvem sem usar cache local
             await pullFromCloud(false);
 
-            // 2. Inicia escuta em tempo real do Firebase
+            // 2. Inicia stream em tempo real do Firebase
             startRealtimeFirebaseStream();
 
-            // 3. Verificação contínua a cada 8 segundos para garantir sincronia em qualquer rede móvel
+            // 3. Sincronização automática a cada 6 segundos e sempre que o cliente volta para a aba do celular
             setInterval(() => {
                 if (document.getElementById('admin-modal').classList.contains('hidden')) {
                     pullFromCloud(false);
                 }
-            }, 8000);
+            }, 6000);
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && document.getElementById('admin-modal').classList.contains('hidden')) {
+                    pullFromCloud(false);
+                }
+            });
         });
     </script>
 </body>
